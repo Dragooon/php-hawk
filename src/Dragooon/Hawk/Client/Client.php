@@ -18,7 +18,10 @@ class Client implements ClientInterface
     private $localtimeOffset;
 
     /**
-     * @param integer $localtimeOffset
+     * @param Crypto $crypto
+     * @param TimeProviderInterface $timeProvider
+     * @param NonceProviderInterface $nonceProvider
+     * @param int $localtimeOffset
      */
     public function __construct(
         Crypto $crypto,
@@ -32,6 +35,13 @@ class Client implements ClientInterface
         $this->localtimeOffset = $localtimeOffset;
     }
 
+    /**
+     * @param CredentialsInterface $credentials
+     * @param $uri
+     * @param $method
+     * @param array $options
+     * @return Request
+     */
     public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = array())
     {
         $timestamp = isset($options['timestamp']) ? $options['timestamp'] : $this->timeProvider->createTimestamp();
@@ -113,6 +123,13 @@ class Client implements ClientInterface
         return new Request(HeaderFactory::create('Authorization', $attributes), $artifacts);
     }
 
+    /**
+     * @param CredentialsInterface $credentials
+     * @param Request $request
+     * @param $headerObjectOrString
+     * @param array $options
+     * @return bool
+     */
     public function authenticate(
         CredentialsInterface $credentials,
         Request $request,
@@ -179,6 +196,13 @@ class Client implements ClientInterface
         return $artifacts->hash() === $hash;
     }
 
+    /**
+     * @param CredentialsInterface $credentials
+     * @param $uri
+     * @param $ttlSec
+     * @param array $options
+     * @return mixed
+     */
     public function createBewit(CredentialsInterface $credentials, $uri, $ttlSec, array $options = array())
     {
         $timestamp = isset($options['timestamp']) ? $options['timestamp'] : $this->timeProvider->createTimestamp();

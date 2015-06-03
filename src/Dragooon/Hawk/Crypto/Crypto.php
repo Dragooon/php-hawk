@@ -8,6 +8,12 @@ class Crypto
 {
     const HEADER_VERSION = 1;
 
+    /**
+     * @param string $payload
+     * @param string $algorithm
+     * @param string $contentType
+     * @return string
+     */
     public function calculatePayloadHash($payload, $algorithm, $contentType)
     {
         list ($contentType) = explode(';', $contentType);
@@ -20,6 +26,12 @@ class Crypto
         return base64_encode(hash($algorithm, $normalized, true));
     }
 
+    /**
+     * @param string $type
+     * @param CredentialsInterface $credentials
+     * @param Artifacts $attributes
+     * @return string
+     */
     public function calculateMac($type, CredentialsInterface $credentials, Artifacts $attributes)
     {
         $normalized = $this->generateNormalizedString($type, $attributes);
@@ -27,6 +39,11 @@ class Crypto
         return base64_encode(hash_hmac($credentials->algorithm(), $normalized, $credentials->key(), true));
     }
 
+    /**
+     * @param int $ts
+     * @param CredentialsInterface $credentials
+     * @return string
+     */
     public function calculateTsMac($ts, CredentialsInterface $credentials)
     {
         $normalized = 'hawk.'.self::HEADER_VERSION.'.ts'."\n".
@@ -40,6 +57,11 @@ class Crypto
         ));
     }
 
+    /**
+     * @param int $a
+     * @param int $b
+     * @return bool
+     */
     public function fixedTimeComparison($a, $b)
     {
         $mismatch = strlen($a) === strlen($b) ? 0 : 1;
@@ -56,6 +78,11 @@ class Crypto
         return (0 === $mismatch);
     }
 
+    /**
+     * @param string $type
+     * @param Artifacts $attributes
+     * @return string
+     */
     private function generateNormalizedString($type, Artifacts $attributes)
     {
         $normalized = 'hawk.'.self::HEADER_VERSION.'.'.$type."\n".

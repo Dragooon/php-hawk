@@ -4,6 +4,13 @@ namespace Dragooon\Hawk\Header;
 
 class HeaderParser
 {
+    /**
+     * @param mixed $fieldValue
+     * @param array $requiredKeys
+     * @return array
+     * @throws FieldValueParserException
+     * @throws NotHawkAuthorizationException
+     */
     public static function parseFieldValue($fieldValue, array $requiredKeys = null)
     {
         if (0 !== strpos($fieldValue, 'Hawk')) {

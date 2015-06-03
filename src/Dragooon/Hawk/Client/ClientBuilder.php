@@ -15,6 +15,10 @@ class ClientBuilder
     private $nonceProvider;
     private $localtimeOffset = 0;
 
+    /**
+     * @param Crypto $crypto
+     * @return $this
+     */
     public function setCrypto(Crypto $crypto)
     {
         $this->crypto = $crypto;
@@ -22,6 +26,10 @@ class ClientBuilder
         return $this;
     }
 
+    /**
+     * @param TimeProviderInterface $timeProvider
+     * @return $this
+     */
     public function setTimeProvider(TimeProviderInterface $timeProvider)
     {
         $this->timeProvider = $timeProvider;
@@ -29,6 +37,10 @@ class ClientBuilder
         return $this;
     }
 
+    /**
+     * @param NonceProviderInterface $nonceProvider
+     * @return $this
+     */
     public function setNonceProvider(NonceProviderInterface $nonceProvider)
     {
         $this->nonceProvider = $nonceProvider;
@@ -36,6 +48,10 @@ class ClientBuilder
         return $this;
     }
 
+    /**
+     * @param null $localtimeOffset
+     * @return $this
+     */
     public function setLocaltimeOffset($localtimeOffset = null)
     {
         $this->localtimeOffset = $localtimeOffset;
@@ -43,6 +59,9 @@ class ClientBuilder
         return $this;
     }
 
+    /**
+     * @return Client
+     */
     public function build()
     {
         $crypto = $this->crypto ?: new Crypto;
@@ -57,6 +76,9 @@ class ClientBuilder
         );
     }
 
+    /**
+     * @return static
+     */
     public static function create()
     {
         return new static;

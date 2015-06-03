@@ -4,6 +4,11 @@ namespace Dragooon\Hawk\Header;
 
 class HeaderFactory
 {
+    /**
+     * @param string $fieldName
+     * @param array $attributes
+     * @return Header
+     */
     public static function create($fieldName, array $attributes = null)
     {
         $fieldValue = 'Hawk';
@@ -22,6 +27,14 @@ class HeaderFactory
         return new Header($fieldName, $fieldValue, $attributes);
     }
 
+    /**
+     * @param string $fieldName
+     * @param mixed $fieldValue
+     * @param array $requiredKeys
+     * @return Header
+     * @throws FieldValueParserException
+     * @throws NotHawkAuthorizationException
+     */
     public static function createFromString($fieldName, $fieldValue, array $requiredKeys = null)
     {
         return static::create(
@@ -30,6 +43,12 @@ class HeaderFactory
         );
     }
 
+    /**
+     * @param string $fieldName
+     * @param mixed $headerObjectOrString
+     * @param callback $onError
+     * @return Header
+     */
     public static function createFromHeaderObjectOrString($fieldName, $headerObjectOrString, $onError)
     {
         if (is_string($headerObjectOrString)) {

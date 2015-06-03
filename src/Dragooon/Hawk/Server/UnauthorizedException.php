@@ -9,12 +9,19 @@ class UnauthorizedException extends \Exception
     private $attributes;
     private $header;
 
+    /**
+     * @param string $message
+     * @param array $attributes
+     */
     public function __construct($message = null, array $attributes = null)
     {
         parent::__construct($message);
         $this->attributes = $attributes ?: array();
     }
 
+    /**
+     * @return \Dragooon\Hawk\Header\Header
+     */
     public function getHeader()
     {
         if (null !== $this->header) {

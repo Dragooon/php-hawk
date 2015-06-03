@@ -5,6 +5,7 @@ namespace Dragooon\Hawk\Server;
 use Dragooon\Hawk\Crypto\Crypto;
 use Dragooon\Hawk\Time\DefaultTimeProviderFactory;
 use Dragooon\Hawk\Time\TimeProviderInterface;
+use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
 
 class ServerBuilder
 {
@@ -15,11 +16,18 @@ class ServerBuilder
     private $timestampSkewSec;
     private $localtimeOffsetSec;
 
+    /**
+     * @param CredentialsProviderInterface $credentialsProvider
+     */
     public function __construct($credentialsProvider)
     {
         $this->credentialsProvider = $credentialsProvider;
     }
 
+    /**
+     * @param Crypto $crypto
+     * @return $this
+     */
     public function setCrypto(Crypto $crypto)
     {
         $this->crypto = $crypto;
@@ -27,6 +35,10 @@ class ServerBuilder
         return $this;
     }
 
+    /**
+     * @param TimeProviderInterface $timeProvider
+     * @return $this
+     */
     public function setTimeProvider(TimeProviderInterface $timeProvider)
     {
         $this->timeProvider = $timeProvider;
@@ -34,6 +46,10 @@ class ServerBuilder
         return $this;
     }
 
+    /**
+     * @param $nonceValidator
+     * @return $this
+     */
     public function setNonceValidator($nonceValidator)
     {
         $this->nonceValidator = $nonceValidator;
@@ -41,6 +57,10 @@ class ServerBuilder
         return $this;
     }
 
+    /**
+     * @param int $timestampSkewSec
+     * @return $this
+     */
     public function setTimestampSkewSec($timestampSkewSec = null)
     {
         $this->timestampSkewSec = $timestampSkewSec;
@@ -48,6 +68,10 @@ class ServerBuilder
         return $this;
     }
 
+    /**
+     * @param int $localtimeOffsetSec
+     * @return $this
+     */
     public function setLocaltimeOffsetSec($localtimeOffsetSec = null)
     {
         $this->localtimeOffsetSec = $localtimeOffsetSec;
@@ -55,6 +79,9 @@ class ServerBuilder
         return $this;
     }
 
+    /**
+     * @return Server
+     */
     public function build()
     {
         $crypto = $this->crypto ?: new Crypto;
@@ -75,6 +102,10 @@ class ServerBuilder
         );
     }
 
+    /**
+     * @param CredentialsProviderInterface $credentialsProvider
+     * @return static
+     */
     public static function create($credentialsProvider)
     {
         return new static($credentialsProvider);

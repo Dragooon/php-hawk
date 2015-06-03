@@ -8,11 +8,17 @@ class NonceProvider implements NonceProviderInterface
 {
     private $generator;
 
+    /**
+     * @param Generator $generator
+     */
     public function __construct(Generator $generator)
     {
         $this->generator = $generator;
     }
 
+    /**
+     * @return string
+     */
     public function createNonce()
     {
         return $this->generator->generateString(

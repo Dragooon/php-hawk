@@ -6,6 +6,9 @@ use RandomLib\Factory;
 
 class DefaultNonceProviderFactory
 {
+    /**
+     * @return NonceProvider
+     */
     public static function create()
     {
         $factory = new Factory;

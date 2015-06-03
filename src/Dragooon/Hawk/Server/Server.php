@@ -22,6 +22,14 @@ class Server implements ServerInterface
     private $timestampSkewSec;
     private $localtimeOffsetSec;
 
+    /**
+     * @param Crypto $crypto
+     * @param CredentialsProviderInterface $credentialsProvider
+     * @param TimeProviderInterface $timeProvider
+     * @param NonceValidatorInterface $nonceValidator
+     * @param int $timestampSkewSec
+     * @param int $localtimeOffsetSec
+     */
     public function __construct(
         Crypto $crypto,
         $credentialsProvider,
@@ -58,6 +66,17 @@ class Server implements ServerInterface
         $this->localtimeOffsetSec = $localtimeOffsetSec;
     }
 
+    /**
+     * @param string $method
+     * @param string $host
+     * @param int $port
+     * @param mixed $resource
+     * @param string $contentType
+     * @param mixed $payload
+     * @param mixed $headerObjectOrString
+     * @return Response
+     * @throws UnauthorizedException
+     */
     public function authenticate(
         $method,
         $host,
@@ -143,6 +162,12 @@ class Server implements ServerInterface
         return new Response($credentials, $artifacts);
     }
 
+    /**
+     * @param CredentialsInterface $credentials
+     * @param Artifacts $artifacts
+     * @param array $options
+     * @return Header
+     */
     public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = array())
     {
         if (isset($options['payload']) || isset($options['content_type'])) {
@@ -193,6 +218,13 @@ class Server implements ServerInterface
         return HeaderFactory::create('Server-Authorization', $attributes);
     }
 
+    /**
+     * @param CredentialsInterface $credentials
+     * @param string $payload
+     * @param string $contentType
+     * @param string $hash
+     * @return bool
+     */
     public function authenticatePayload(
         CredentialsInterface $credentials,
         $payload,
@@ -204,6 +236,13 @@ class Server implements ServerInterface
         return $this->crypto->fixedTimeComparison($calculatedHash, $hash);
     }
 
+    /**
+     * @param string $host
+     * @param int $port
+     * @param string $resource
+     * @return Response
+     * @throws UnauthorizedException
+     */
     public function authenticateBewit(
         $host,
         $port,

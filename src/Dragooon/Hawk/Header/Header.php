@@ -8,6 +8,11 @@ class Header
     private $fieldValue;
     private $attributes;
 
+    /**
+     * @param string  $fieldName
+     * @param string $fieldValue
+     * @param array $attributes
+     */
     public function __construct($fieldName, $fieldValue, array $attributes = null)
     {
         $this->fieldName = $fieldName;
@@ -15,16 +20,26 @@ class Header
         $this->attributes = $attributes ?: array();
     }
 
+    /**
+     * @return string
+     */
     public function fieldName()
     {
         return $this->fieldName;
     }
 
+    /**
+     * @return string
+     */
     public function fieldValue()
     {
         return $this->fieldValue;
     }
 
+    /**
+     * @param array $keys
+     * @return array
+     */
     public function attributes(array $keys = null)
     {
         if (null === $keys) {
@@ -41,6 +56,10 @@ class Header
         return $attributes;
     }
 
+    /**
+     * @param string $key
+     * @return mixed
+     */
     public function attribute($key)
     {
         if (isset($this->attributes[$key])) {
