@@ -1,0 +1,41 @@
+{
+    "name": "Dragooon/hawk",
+    "description": "Hawk",
+    "keywords": ["hawk", "authentication", "bewit", "protocol"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dragonfly Development Inc.",
+            "email": "info@dflydev.com",
+            "homepage": "http://dflydev.com"
+        },
+        {
+            "name": "Beau Simensen",
+            "email": "beau@dflydev.com",
+            "homepage": "http://beausimensen.com"
+        },
+        {
+            "name": "Shitiz Garg",
+            "email": "mail@dragooon.net",
+            "homepage": "http://dragooon.net"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Dflydev\\Hawk": "src"
+        }
+    },
+    "require": {
+        "ircmaxell/random-lib": "^1.0@dev"
+    },
+    "require-dev": {
+        "codeclimate/php-test-reporter": "~0.1@dev",
+        "phpunit/phpunit": "~4.5",
+        "squizlabs/php_codesniffer": "~2.3"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
