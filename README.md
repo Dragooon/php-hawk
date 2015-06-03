@@ -5,6 +5,8 @@ Hawk — A PHP Implementation
 > (MAC) algorithm to provide partial HTTP request cryptographic verification.
 > — [hawk README][0]
 
+This implementation is a fork of the PHP port of Hawk at [dflydev/dflydev-hawk][2]
+
 Client
 ------
 
@@ -537,6 +539,7 @@ License
 -------
 
 The MIT License (See LICENSE)
+
 Originally based on [dflydev/dflydev-hawk][2] (licensed under MIT)
 
 
