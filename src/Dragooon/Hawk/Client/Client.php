@@ -41,6 +41,7 @@ class Client implements ClientInterface
      * @param $method
      * @param array $options
      * @return Request
+     * @throws \InvalidArgumentException
      */
     public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = array())
     {
@@ -50,7 +51,7 @@ class Client implements ClientInterface
         elseif (!$credentials->key() || !$credentials->id() || !$credentials->algorithm()) {
             throw new \InvalidArgumentException('Specified credentials is invalid');
         }
-        
+
         $timestamp = isset($options['timestamp']) ? $options['timestamp'] : $this->timeProvider->createTimestamp();
         if ($this->localtimeOffset) {
             $timestamp += $this->localtimeOffset;
@@ -252,5 +253,57 @@ class Client implements ClientInterface
             array('-', '_', '', ''),
             base64_encode($bewit)
         );
+    }
+
+    /**
+     * Generate an authorization string for a message
+     *
+     * @param CredentialsInterface $credentials
+     * @param string $host
+     * @param int $port
+     * @param string $message
+     * @param array $options
+     * @return \Dragooon\Hawk\Client\Message
+     * @throws \InvalidArgumentException
+     */
+    public function createMessage(CredentialsInterface $credentials, $host, $port, $message, array $options = array())
+    {
+        if (empty($host) || empty($port) || !is_numeric($port)) {
+            throw new \InvalidArgumentException('Invalid host or port specified');
+        }
+        elseif (!$credentials->key() || !$credentials->id() || !$credentials->algorithm()) {
+            throw new \InvalidArgumentException('Specified credentials is invalid');
+        }
+        elseif (empty($message) || !is_string($message)) {
+            throw new \InvalidArgumentException('Specified message is not valid');
+        }
+
+        $timestamp = isset($options['timestamp']) ? $options['timestamp'] : $this->timeProvider->createTimestamp();
+        if ($this->localtimeOffset) {
+            $timestamp += $this->localtimeOffset;
+        }
+
+        $artifacts = new Artifacts(
+            '',
+            $host,
+            $port,
+            '',
+            $timestamp,
+            !empty($options['nonce']) ? $options['nonce'] : $this->nonceProvider->createNonce(),
+            '',
+            '',
+            '',
+            $this->crypto->calculatePayloadHash($message, $credentials->algorithm(), '')
+        );
+
+        $result = new Message(
+            $credentials->id(),
+            $timestamp,
+            $artifacts->nonce(),
+            $artifacts->hash(),
+            $this->crypto->calculateMac('message', $credentials, $artifacts)
+        );
+
+        return $result;
     }
 }
