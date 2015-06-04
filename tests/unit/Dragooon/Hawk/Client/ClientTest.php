@@ -3,8 +3,11 @@
 namespace Dragooon\Hawk\Client;
 
 use Dragooon\Hawk\Credentials\Credentials;
+use Dragooon\Hawk\Crypto\Artifacts;
+use Dragooon\Hawk\Header\Header;
 use Dragooon\Hawk\Nonce\NonceProviderInterface;
 use Dragooon\Hawk\Time\TimeProviderInterface;
+use Dragooon\Hawk\Header\HeaderFactory;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {
@@ -211,5 +214,71 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 'Message authorization should fail on invalid host'
             ),
         );
+    }
+
+    /**
+     * @test
+     */
+    public function shouldTestAuthentication()
+    {
+        $client = ClientBuilder::create()->build();
+
+        $credentials = new Credentials('werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn', 'sha256', 123456);
+
+        $blankHeader = new Header('', '');
+
+        // Test for successful authentication (without payload)
+        $artifacts = new Artifacts(
+            'POST',
+            'example.com',
+            8080,
+            '/resource/4?filter=a',
+            1362336900,
+            'eb5S_L',
+            'some-app-data'
+        );
+        $test = $client->authenticate(
+            $credentials,
+            new Request($blankHeader, $artifacts),
+            'Hawk mac="XIJRsMl/4oL+nn+vKoeVZPdCHXB4yJkNnBbTbHFZUYE=", hash="f9cDF/TDm7TkYRLnGwRMfeDzT6LixQVLvrIKhh0vgmM=", ext="response-specific"',
+            array('content_type' => 'text/plain')
+        );
+        $this->assertTrue($test, 'Should successfully authenticate');
+
+        // Test for successful authentication (with payload)
+        $artifacts = new Artifacts(
+            'POST',
+            'example.com',
+            8080,
+            '/resource/4?filter=a',
+            1362336900,
+            'eb5S_L',
+            'some-app-data'
+        );
+        $test = $client->authenticate(
+            $credentials,
+            new Request($blankHeader, $artifacts),
+            'Hawk mac="9lE3eaJZQof5GnxjM0eQZmtJ3M/GrqKVaX1dUI3zuO8=", hash="vcngjQGyNJQ/Q3y/voD1FNW1h1xK1D/EGCvIH86cfu0=", ext="response-specific',
+            array('content_type' => 'text/plain', 'payload' => 'This is amazing')
+        );
+        $this->assertTrue($test, 'Should successfully authenticate');
+
+        // Test for unsuccessful authentication (with payload)
+        $artifacts = new Artifacts(
+            'GET',
+            'example.com',
+            8080,
+            '/resource/4?filter=a',
+            1362336900,
+            'eb5S_L',
+            'some-app-data'
+        );
+        $test = $client->authenticate(
+            $credentials,
+            new Request($blankHeader, $artifacts),
+            'Hawk mac="9lE3eaJZQof5GnxjM0eQZmtJ3M/GrqKVaX1dUI3zuO8=", hash="vcngjQGyNJQ/Q3y/voD1FNW1h1xK1D/EGCvIH86cfu0=", ext="response-specific',
+            array('content_type' => 'text/plain', 'payload' => 'This is amazing')
+        );
+        $this->assertFalse($test, 'Should not authenticate');
     }
 }
