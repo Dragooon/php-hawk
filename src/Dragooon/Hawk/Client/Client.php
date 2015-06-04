@@ -153,15 +153,9 @@ class Client implements ClientInterface
             }
         );
 
-        if (isset($options['payload']) || isset($options['content_type'])) {
-            if (isset($options['payload']) && isset($options['content_type'])) {
-                $payload = $options['payload'];
-                $contentType = $options['content_type'];
-            } else {
-                throw new \InvalidArgumentException(
-                    'If one of "payload" and "content_type" are specified, both must be specified.'
-                );
-            }
+        if (isset($options['payload'])) {
+            $payload = $options['payload'];
+            $contentType = !empty($options['content_type']) ? $options['content_type'] : '';
         } else {
             $payload = null;
             $contentType = null;
