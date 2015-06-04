@@ -133,7 +133,7 @@ class Client implements ClientInterface
     /**
      * @param CredentialsInterface $credentials
      * @param Request $request
-     * @param $headerObjectOrString
+     * @param mixed $headerObjectOrString Response header
      * @param array $options
      * @return bool
      */
