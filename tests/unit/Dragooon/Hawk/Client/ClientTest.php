@@ -33,4 +33,118 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             )
         );
     }
+
+    /**
+     * @test
+     * @dataProvider headerDataProvider
+     *
+     * @param Credentials $credentials
+     * @param string $url
+     * @param string $method
+     * @param array $options
+     * @param mixed $expectedHeader False if the header is expected to throw an exception
+     * @param string $message
+     * @return void
+     */
+    public function shouldTestHeader(Credentials $credentials, $url, $method, array $options, $expectedHeader, $message)
+    {
+        $client = ClientBuilder::create()->build();
+
+        if ($expectedHeader === false) {
+            $this->setExpectedException('InvalidArgumentException');
+        }
+
+        $header = $client->createRequest($credentials, $url, $method, $options)->header();
+
+        $this->assertEquals($expectedHeader, $header->fieldValue(), $message);
+    }
+
+    /**
+     * @return array
+     */
+    public function headerDataProvider()
+    {
+        return array(
+            array(
+                new Credentials('2983d45yun89q', 'sha1', 123456),
+                'http://example.net/somewhere/over/the/rainbow',
+                'POST',
+                array('ext' => 'Bazinga!', 'timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => 'something to write about'),
+                'Hawk id="123456", ts="1353809207", nonce="Ygvqdz", hash="bsvY3IfUllw6V5rvk4tStEvpBhE=", ext="Bazinga!", mac="qbf1ZPG/r/e06F4ht+T77LXi5vw="',
+                'Header with sha1 hash should be equal'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                'https://example.net/somewhere/over/the/rainbow',
+                'POST',
+                array('ext' => 'Bazinga!', 'timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => 'something to write about', 'content_type' => 'text/plain'),
+                'Hawk id="123456", ts="1353809207", nonce="Ygvqdz", hash="2QfCt3GuY9HQnHWyWD3wX68ZOKbynqlfYmuO2ZBRqtY=", ext="Bazinga!", mac="q1CwFoSHzPZSkbIvl0oYlD+91rBUEvFk763nMjMndj8="',
+                'Header with sha256 hash should be equal'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                'https://example.net/somewhere/over/the/rainbow',
+                'POST',
+                array('timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => 'something to write about', 'content_type' => 'text/plain'),
+                'Hawk id="123456", ts="1353809207", nonce="Ygvqdz", hash="2QfCt3GuY9HQnHWyWD3wX68ZOKbynqlfYmuO2ZBRqtY=", mac="HTgtd0jPI6E4izx8e4OHdO36q00xFCU0FolNq3RiCYs="',
+                'Header with sha256 hash should be equal (with no ext)'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                'https://example.net/somewhere/over/the/rainbow',
+                'POST',
+                array('ext' => null, 'timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => 'something to write about', 'content_type' => 'text/plain'),
+                'Hawk id="123456", ts="1353809207", nonce="Ygvqdz", hash="2QfCt3GuY9HQnHWyWD3wX68ZOKbynqlfYmuO2ZBRqtY=", mac="HTgtd0jPI6E4izx8e4OHdO36q00xFCU0FolNq3RiCYs="',
+                'Header with sha256 hash should be equal (ext specified as null)'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                'https://example.net/somewhere/over/the/rainbow',
+                'POST',
+                array('timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => '', 'content_type' => 'text/plain'),
+                'Hawk id="123456", ts="1353809207", nonce="Ygvqdz", hash="q/t+NNAkQZNlq/aAD6PlexImwQTxwgT2MahfTa9XRLA=", mac="U5k16YEzn3UnBHKeBzsDXn067Gu3R4YaY6xOt9PYRZM="',
+                'Header with sha256 hash should be equal (empty payload)'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                '',
+                'POST',
+                array('timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => '', 'content_type' => 'text/plain'),
+                false,
+                'Header should return an error (missing URI)'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                4,
+                'POST',
+                array('timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => '', 'content_type' => 'text/plain'),
+                false,
+                'Header should return an error (invalid URI)'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                'https://example.net/somewhere/over/the/rainbow',
+                '',
+                array('timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => '', 'content_type' => 'text/plain'),
+                false,
+                'Header should return an error (missing method)'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                'https://example.net/somewhere/over/the/rainbow',
+                4,
+                array('timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => '', 'content_type' => 'text/plain'),
+                false,
+                'Header should return an error (invalid method)'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256'),
+                'https://example.net/somewhere/over/the/rainbow',
+                'POST',
+                array('timestamp' => 1353809207, 'nonce' => 'Ygvqdz', 'payload' => '', 'content_type' => 'text/plain'),
+                false,
+                'Header should return an error (invalid credentials)'
+            ),
+        );
+    }
 }
