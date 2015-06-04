@@ -147,4 +147,69 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ),
         );
     }
+
+    /**
+     * @test
+     * @dataProvider messageDataProvider
+     *
+     * @param Credentials $credentials
+     * @param string $host
+     * @param int $port
+     * @param string $message
+     * @param array $options
+     * @param mixed $expected
+     * @param string $testMessage
+     */
+    public function shouldTestMessage(Credentials $credentials, $host, $port, $message, array $options, $expected, $testMessage)
+    {
+        $client = ClientBuilder::create()->build();
+
+        if ($expected === false) {
+            $this->setExpectedException('InvalidArgumentException');
+        }
+
+        $message = $client->createMessage($credentials, $host, $port, $message, $options);
+
+        if (!empty($expected)) {
+            $this->assertEquals($options['timestamp'], $message->timestamp(), $testMessage);
+            $this->assertEquals($options['nonce'], $message->nonce(), $testMessage);
+            $this->assertEquals($expected, $message->mac(), $testMessage);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function messageDataProvider()
+    {
+        return array(
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                'example.net',
+                80,
+                'I am the boodyman',
+                array('timestamp' => 1353809207, 'nonce' => 'abc123'),
+                'fWpeQac+YUDgpFkOXiJCfHXV19FHU6uKJh2pXyKa8BQ=',
+                'Message authorization should be generated'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256'),
+                'example.net',
+                80,
+                'I am the boodyman',
+                array('timestamp' => 1353809207, 'nonce' => 'abc123'),
+                false,
+                'Message authorization should fail on invalid credentials'
+            ),
+            array(
+                new Credentials('2983d45yun89q', 'sha256', 123456),
+                '',
+                80,
+                'I am the boodyman',
+                array('timestamp' => 1353809207, 'nonce' => 'abc123'),
+                false,
+                'Message authorization should fail on invalid host'
+            ),
+        );
+    }
 }
