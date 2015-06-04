@@ -44,12 +44,24 @@ class Client implements ClientInterface
      */
     public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = array())
     {
+        if (empty($method) || !is_string($method)) {
+            throw new \InvalidArgumentException('Specified method is invalid');
+        }
+        elseif (!$credentials->key() || !$credentials->id() || !$credentials->algorithm()) {
+            throw new \InvalidArgumentException('Specified credentials is invalid');
+        }
+        
         $timestamp = isset($options['timestamp']) ? $options['timestamp'] : $this->timeProvider->createTimestamp();
         if ($this->localtimeOffset) {
             $timestamp += $this->localtimeOffset;
         }
 
         $parsed = parse_url($uri);
+
+        if (!$parsed || empty($parsed['host'])) {
+            throw new \InvalidARgumentException('Specified URI is invalid');
+        }
+
         $host = $parsed['host'];
         $resource = isset($parsed['path']) ? $parsed['path'] : '';
 
