@@ -181,7 +181,7 @@ class Client implements ClientInterface
         );
 
         $mac = $this->crypto->calculateMac('response', $credentials, $artifacts);
-        if ($header->attribute('mac') !== $mac) {
+        if (!$this->crypto->fixedTimeComparison($mac, $header->attribute('mac'))) {
             return false;
         }
 
@@ -194,7 +194,7 @@ class Client implements ClientInterface
         }
 
         $hash = $this->crypto->calculatePayloadHash($payload, $credentials->algorithm(), $contentType);
-        return $artifacts->hash() === $hash;
+        return $this->crypto->fixedTimeComparison($hash, $artifacts->hash());
     }
 
     /**
