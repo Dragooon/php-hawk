@@ -12,9 +12,14 @@ class Credentials implements CredentialsInterface
      * @param $key
      * @param string $algorithm
      * @param mixed $id
+     * @throws \InvalidArgumentException
      */
     public function __construct($key, $algorithm = 'sha256', $id = null)
     {
+        if (!in_array($algorithm, hash_algos())) {
+            throw new \InvalidArgumentException('Invalid hash specified');
+        }
+
         $this->key = $key;
         $this->algorithm = $algorithm;
         $this->id = $id;
