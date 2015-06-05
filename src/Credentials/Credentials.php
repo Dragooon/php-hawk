@@ -20,9 +20,9 @@ class Credentials implements CredentialsInterface
             throw new \InvalidArgumentException('Invalid hash specified');
         }
 
-        $this->key = $key;
-        $this->algorithm = $algorithm;
-        $this->id = $id;
+        $this->key = trim($key);
+        $this->algorithm = trim($algorithm);
+        $this->id = trim($id);
     }
 
     /**

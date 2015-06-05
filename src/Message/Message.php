@@ -19,11 +19,11 @@ class Message
      */
     public function __construct($id, $timestamp, $nonce, $hash, $mac)
     {
-        $this->id = $id;
-        $this->timestamp = $timestamp;
-        $this->nonce = $nonce;
-        $this->hash = $hash;
-        $this->mac = $mac;
+        $this->id = trim($id);
+        $this->timestamp = trim($timestamp);
+        $this->nonce = trim($nonce);
+        $this->hash = trim($hash);
+        $this->mac = trim($mac);
     }
 
     /**
