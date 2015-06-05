@@ -1,6 +1,6 @@
 <?php
 
-namespace Dragooon\Hawk\Client;
+namespace Dragooon\Hawk\Message;
 
 class Message
 {

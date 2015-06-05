@@ -9,6 +9,7 @@ use Dragooon\Hawk\Header\Header;
 use Dragooon\Hawk\Header\HeaderFactory;
 use Dragooon\Hawk\Nonce\NonceProviderInterface;
 use Dragooon\Hawk\Time\TimeProviderInterface;
+use Dragooon\Hawk\Message\Message;
 
 class Client implements ClientInterface
 {
@@ -236,7 +237,7 @@ class Client implements ClientInterface
      * @param int $port
      * @param string $message
      * @param array $options
-     * @return \Dragooon\Hawk\Client\Message
+     * @return Message
      * @throws \InvalidArgumentException
      */
     public function createMessage(CredentialsInterface $credentials, $host, $port, $message, array $options = array())
