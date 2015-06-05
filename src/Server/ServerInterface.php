@@ -4,6 +4,7 @@ namespace Dragooon\Hawk\Server;
 
 use Dragooon\Hawk\Credentials\CredentialsInterface;
 use Dragooon\Hawk\Crypto\Artifacts;
+use Dragooon\Hawk\Message\Message;
 
 interface ServerInterface
 {
@@ -48,4 +49,25 @@ interface ServerInterface
         $contentType,
         $hash
     );
+
+    /**
+     * @param string $host
+     * @param int $port
+     * @param string $resource
+     * @return Response
+     * @throws UnauthorizedException
+     */
+    public function authenticateBewit($host, $port, $resource);
+
+    /**
+     * Authenticates a single message from a client
+     *
+     * @param string $host
+     * @param int $port
+     * @param string $message
+     * @param Message $authorization
+     * @return Response
+     * @throws UnauthorizedException
+     */
+    public function authenticateMessage($host, $port, $message, Message $authorization);
 }

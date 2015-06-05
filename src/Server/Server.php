@@ -252,11 +252,8 @@ class Server implements ServerInterface
      * @return Response
      * @throws UnauthorizedException
      */
-    public function authenticateBewit(
-        $host,
-        $port,
-        $resource
-    ) {
+    public function authenticateBewit($host, $port, $resource)
+    {
         // Measure now before any other processing
         $now = $this->timeProvider->createTimestamp() + $this->localtimeOffsetSec;
 
