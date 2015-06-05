@@ -13,6 +13,7 @@ use Dragooon\Hawk\Header\HeaderFactory;
 use Dragooon\Hawk\Nonce\CallbackNonceValidator;
 use Dragooon\Hawk\Nonce\NonceValidatorInterface;
 use Dragooon\Hawk\Time\TimeProviderInterface;
+use Dragooon\Hawk\Message\Message;
 
 class Server implements ServerInterface
 {
@@ -305,6 +306,73 @@ class Server implements ServerInterface
 
         if (!$this->crypto->fixedTimeComparison($calculatedMac, $mac)) {
             throw new UnauthorizedException('Bad MAC');
+        }
+
+        return new Response($credentials, $artifacts);
+    }
+
+    /**
+     * Authenticates a single message from a client
+     *
+     * @param string $host
+     * @param int $port
+     * @param string $message
+     * @param Message $authorization
+     * @param array $options
+     * @return Response
+     * @throws UnauthorizedException
+     */
+    public function authenticateMessage($host, $port, $message, Message $authorization, array $options)
+    {
+        if (!$authorization->id() || !$authorization->timestamp() || !$authorization->nonce()
+            || !$authorization->hash() || !$authorization->mac()) {
+            throw new UnauthorizedException('Bad authorization');
+        }
+
+        try {
+            $credentials = $this->credentialsProvider->loadCredentialsById($authorization->id());
+
+            if (!$credentials->key()) {
+                throw new UnauthorizedException('Credentials invalid');
+            }
+        } catch (CredentialsNotFoundException $e) {
+            throw new UnauthorizedException('Credentials not found');
+        }
+
+        $artifacts = new Artifacts(
+            null,
+            $host,
+            $port,
+            null,
+            $authorization->timestamp(),
+            $authorization->nonce(),
+            null,
+            null,
+            null,
+            $authorization->hash()
+        );
+
+        if (!$this->nonceValidator->validateNonce($artifacts->nonce(), $artifacts->timestamp())) {
+            throw new UnauthorizedException('Invalid nonce');
+        }
+
+        $calculatedMac = $this->crypto->calculateMac('message', $credentials, $artifacts);
+        if (!$this->crypto->fixedTimeComparison($calculatedMac, $authorization->mac())) {
+            throw new UnauthorizedException('Bad MAC');
+        }
+
+        $calculatedHash = $this->crypto->calculatePayloadHash($message, $credentials->algorithm(), '');
+        if (!$this->crypto->fixedTimeComparison($calculatedHash, $authorization->hash())) {
+            throw new UnauthorizedException('Bad payload hash');
+        }
+
+        $now = $this->timeProvider->createTimestamp() + $this->localtimeOffsetSec;
+
+        if (abs($artifacts->timestamp() - $now) > $this->timestampSkewSec) {
+            $ts = $this->timeProvider->createTimestamp() + $this->localtimeOffsetSec;
+            $tsm = $this->crypto->calculateTsMac($ts, $credentials);
+
+            throw new UnauthorizedException('Stale timestamp', array('ts' => $ts, 'tsm' => $tsm));
         }
 
         return new Response($credentials, $artifacts);
