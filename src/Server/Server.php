@@ -293,8 +293,16 @@ class Server implements ServerInterface
             $ext
         );
 
-        $credentials = $this->credentialsProvider->loadCredentialsById($id);
+        try {
+            $credentials = $this->credentialsProvider->loadCredentialsById($id);
 
+            if (!$credentials->key()) {
+                throw new UnauthorizedException('Credentials invalid');
+            }
+        } catch (CredentialsNotFoundException $e) {
+            throw new UnauthorizedException('Credentials not found');
+        }
+        
         $calculatedMac = $this->crypto->calculateMac(
             'bewit',
             $credentials,
