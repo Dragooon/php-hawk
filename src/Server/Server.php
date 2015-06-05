@@ -117,12 +117,16 @@ class Server implements ServerInterface
         );
 
         foreach (array('id', 'ts', 'nonce', 'mac') as $requiredAttribute) {
-            if (null === $header->attribute($requiredAttribute)) {
+            if (strlen($header->attribute($requiredAttribute)) == 0) {
                 throw new UnauthorizedException('Missing attributes');
             }
         }
 
         $credentials = $this->credentialsProvider->loadCredentialsById($header->attribute('id'));
+
+        if (!$credentials->id() || !$credentials->key()) {
+            throw new UnauthorizedException('Missing credentials');
+        }
 
         $calculatedMac = $this->crypto->calculateMac('header', $credentials, $artifacts);
 
