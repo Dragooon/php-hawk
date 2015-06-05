@@ -4,6 +4,7 @@ namespace Dragooon\Hawk\Server;
 
 use Dragooon\Hawk\Credentials\CallbackCredentialsProvider;
 use Dragooon\Hawk\Credentials\CredentialsInterface;
+use Dragooon\Hawk\Credentials\CredentialsNotFoundException;
 use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
 use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Crypto\Crypto;
@@ -122,10 +123,14 @@ class Server implements ServerInterface
             }
         }
 
-        $credentials = $this->credentialsProvider->loadCredentialsById($header->attribute('id'));
+        try {
+            $credentials = $this->credentialsProvider->loadCredentialsById($header->attribute('id'));
 
-        if (!$credentials->id() || !$credentials->key()) {
-            throw new UnauthorizedException('Missing credentials');
+            if (!$credentials->key()) {
+                throw new UnauthorizedException('Invalid Credentials (missing key)');
+            }
+        } catch (CredentialsNotFoundException $e) {
+            throw new UnauthorizedException('Credentials not found');
         }
 
         $calculatedMac = $this->crypto->calculateMac('header', $credentials, $artifacts);
