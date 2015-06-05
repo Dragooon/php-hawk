@@ -318,11 +318,10 @@ class Server implements ServerInterface
      * @param int $port
      * @param string $message
      * @param Message $authorization
-     * @param array $options
      * @return Response
      * @throws UnauthorizedException
      */
-    public function authenticateMessage($host, $port, $message, Message $authorization, array $options)
+    public function authenticateMessage($host, $port, $message, Message $authorization)
     {
         if (!$authorization->id() || !$authorization->timestamp() || !$authorization->nonce()
             || !$authorization->hash() || !$authorization->mac()) {
