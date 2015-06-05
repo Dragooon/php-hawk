@@ -23,7 +23,7 @@ class HeaderParser
             $equalsPos = strpos($part, '=');
             $key = substr($part, 0, $equalsPos);
             $value = substr($part, $equalsPos + 1);
-            $attributes[$key] = trim($value, '"');
+            $attributes[trim($key)] = trim(trim($value, '"'));
         }
 
         if (null !== $requiredKeys) {
