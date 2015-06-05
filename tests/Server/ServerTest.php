@@ -9,6 +9,7 @@ use Dragooon\Hawk\Time\TimeProviderInterface;
 use Dragooon\Hawk\Header\Header;
 use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Time\DefaultTimeProviderFactory;
+use Dragooon\Hawk\Message\Message;
 
 class ServerTest extends \PHPUnit_Framework_TestCase
 {
@@ -160,7 +161,6 @@ class ServerTest extends \PHPUnit_Framework_TestCase
                 $this->fail($message);
             }
         }
-
     }
 
     /**
@@ -358,5 +358,95 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         catch (UnauthorizedException $e) {
             $this->assertEquals('Invalid nonce', $e->getMessage());
         }
+    }
+
+    /**
+     * @test
+     * @dataProvider messageDataProvider
+     *
+     * @param string $host
+     * @param int $port
+     * @param string $message
+     * @param Message $authorization
+     * @param int $localTimeOffsetSec
+     * @param mixed $expected
+     * @param string $testMessage
+     */
+    public function shouldTestMessage($host, $port, $message, Message $authorization, $localTimeOffsetSec, $expected, $testMessage)
+    {
+        $key = '2983d45yun89q';
+
+        $serverBuilder = ServerBuilder::create(
+            function($id) use ($key) {
+                return new Credentials(
+                    $key,
+                    $id == 1 ? 'sha1' : 'sha256',
+                    $id
+                );
+            }
+        );
+
+        if (!empty($localTimeOffsetSec)) {
+            $serverBuilder->setLocaltimeOffsetSec($localTimeOffsetSec);
+        }
+
+        $server = $serverBuilder->build();
+
+        try {
+            $result = $server->authenticateMessage($host, $port, $message, $authorization);
+
+            if ($expected === true) {
+                $this->assertTrue($result instanceof Response, $testMessage);
+                $this->assertEquals($key, $result->credentials()->key(), $testMessage);
+            } else {
+                $this->fail($testMessage);
+            }
+        } catch (\Exception $e) {
+            if (is_string($expected)) {
+                $this->assertEquals($expected, $e->getMessage(), $testMessage);
+            } else {
+                die(var_dump($e->getMessage()));
+                $this->fail($testMessage);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function messageDataProvider()
+    {
+        $timeProvider = DefaultTimeProviderFactory::create();
+        $now = $timeProvider->createTimestamp();
+
+        return [
+            [
+                'example.net',
+                80,
+                'I am the boodyman',
+                new Message(123456, 1353809207, 'abc123', '8bu1yuaHAgWqdTzyqwocrHNxVvGk9qXMVL7XC5FlsMo=', 'fWpeQac+YUDgpFkOXiJCfHXV19FHU6uKJh2pXyKa8BQ='),
+                1353809207 - $now,
+                true,
+                'Should authenticate message',
+            ],
+            [
+                'example.net',
+                80,
+                'I am the boodyman',
+                new Message(123456, 1353809207, 'abc123', '8bu1yuaHAgWqdTzyqwocrHNxVvGk9qXMVL7XC5FlsMo=', 'fQac+YUDgpFkOXiJCfHXV19FHU6uKJh2pXyKa8BQ='),
+                1353809207 - $now,
+                'Bad MAC',
+                'Should fail for invalid MAC',
+            ],
+            [
+                'example.net',
+                80,
+                'I am the boodyman',
+                new Message(123456, 1353809207, 'abc123', 'aaaabbb', '8pIsaWSf/s/0E0SNZnSzJ3bOKI9j5r0ehKPrdVZXJQs='),
+                1353809207 - $now,
+                'Bad payload hash',
+                'Should fail for invalid payload hash',
+            ],
+        ];
     }
 }
