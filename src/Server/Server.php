@@ -167,9 +167,14 @@ class Server implements ServerInterface
      * @param Artifacts $artifacts
      * @param array $options
      * @return Header
+     * @throws \InvalidArgumentException
      */
     public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = array())
     {
+        if (!$credentials->key()) {
+            throw new \InvalidARgumentException('Invalid credentials (missing key)');
+        }
+
         if (isset($options['payload'])) {
             $payload = $options['payload'];
             $contentType = !empty($options['content_type']) ? $options['content_type'] : '';
