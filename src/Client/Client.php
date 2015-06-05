@@ -56,21 +56,8 @@ class Client implements ClientInterface
         if ($this->localtimeOffset) {
             $timestamp += $this->localtimeOffset;
         }
-
-        $parsed = parse_url($uri);
-
-        if (!$parsed || empty($parsed['host'])) {
-            throw new \InvalidARgumentException('Specified URI is invalid');
-        }
-
-        $host = $parsed['host'];
-        $resource = isset($parsed['path']) ? $parsed['path'] : '';
-
-        if (isset($parsed['query'])) {
-            $resource .= '?'.$parsed['query'];
-        }
-
-        $port = isset($parsed['port']) ? $parsed['port'] : ($parsed['scheme'] === 'https' ? 443 : 80);
+        
+        list ($host, $resource, $port) = $this->parseURI($uri);
 
         $nonce = isset($options['nonce']) ? $options['nonce'] : $this->nonceProvider->createNonce();
 
@@ -211,15 +198,7 @@ class Client implements ClientInterface
             $timestamp += $this->localtimeOffset;
         }
 
-        $parsed = parse_url($uri);
-        $host = $parsed['host'];
-        $resource = isset($parsed['path']) ? $parsed['path'] : '';
-
-        if (isset($parsed['query'])) {
-            $resource .= '?'.$parsed['query'];
-        }
-
-        $port = isset($parsed['port']) ? $parsed['port'] : ($parsed['scheme'] === 'https' ? 443 : 80);
+        list ($host, $resource, $port) = $this->parseURI($uri);
 
         $ext = isset($options['ext']) ? $options['ext'] : null;
 
@@ -299,5 +278,31 @@ class Client implements ClientInterface
         );
 
         return $result;
+    }
+
+    /**
+     * @param string $uri
+     * @return array(host, resource, port)
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function parseURI($uri)
+    {
+        $parsed = parse_url($uri);
+
+        if (!$parsed || empty($parsed['host'])) {
+            throw new \InvalidARgumentException('Specified URI is invalid');
+        }
+
+        $host = $parsed['host'];
+        $resource = isset($parsed['path']) ? $parsed['path'] : '';
+
+        if (isset($parsed['query'])) {
+            $resource .= '?'.$parsed['query'];
+        }
+
+        $port = isset($parsed['port']) ? $parsed['port'] : ($parsed['scheme'] === 'https' ? 443 : 80);
+
+        return array($host, $resource, $port);
     }
 }
