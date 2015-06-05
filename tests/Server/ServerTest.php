@@ -13,28 +13,84 @@ use Dragooon\Hawk\Message\Message;
 
 class ServerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @test */
-    public function shouldAuthenticateBewit()
+    /**
+     * @test
+     * @dataProvider bewitDataProvider
+     *
+     * @param string $host
+     * @param int $port
+     * @param string $resource
+     * @param int $localTimeOffsetSec
+     * @param string $expected
+     * @param string $message
+     */
+    public function shouldAuthenticateBewit($host, $port, $resource, $localTimeOffsetSec, $expected, $message)
     {
-        $credentialsProvider = function ($id) {
+        $key = 'HX9QcbD-r3ItFEnRcAuOSg';
+        $credentialsProvider = function ($id) use ($key)
+        {
             return new Credentials(
-                'HX9QcbD-r3ItFEnRcAuOSg',
+                $key,
                 'sha256',
                 'exqbZWtykFZIh2D7cXi9dA'
             );
         };
 
         $server = ServerBuilder::create($credentialsProvider)
-            ->setTimeProvider(new ConstantTimeProvider(1368996800))
+            ->setLocalTimeOffsetSec($localTimeOffsetSec)
             ->build();
 
-        $response = $server->authenticateBewit(
-            'example.com',
-            443,
-            '/posts?bewit=ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA'
-        );
+        try {
+            $result = $server->authenticateBewit($host, $port, $resource);
 
-        $this->assertEquals('/posts', $response->artifacts()->resource());
+            if ($expected === true) {
+                $this->assertTrue($result instanceof Response, $message);
+                $this->assertEquals($key, $result->credentials()->key(), $message);
+            } else {
+                $this->fail($message);
+            }
+        } catch (\Exception $e) {
+            if (is_string($expected)) {
+                $this->assertEquals($expected, $e->getMessage(), $message);
+            } else {
+                $this->fail($message);
+            }
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function bewitDataProvider()
+    {
+        $now = DefaultTimeProviderFactory::create()->createTimestamp();
+
+        return [
+            [
+                'example.com',
+                443,
+                '/posts?bewit=ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA',
+                1368996800 - $now,
+                true,
+                'Should accept valid bewit request',
+            ],
+            [
+                'example.com',
+                443,
+                '/posts',
+                1368996800 - $now,
+                'Malformed resource or does not contan bewit',
+                'Should reject (missing bewit)',
+            ],
+            [
+                'example.com',
+                80,
+                '/posts?bewit=ZXhxYlpXdHlrRlpJaDJEN2NYaTlkQVwxMzY4OTk2ODAwXE8wbWhwcmdvWHFGNDhEbHc1RldBV3ZWUUlwZ0dZc3FzWDc2dHBvNkt5cUk9XA',
+                1368996800 - $now,
+                'Bad MAC',
+                'Should reject on invalid Bewit',
+            ],
+        ];
     }
     /**
      * @test
