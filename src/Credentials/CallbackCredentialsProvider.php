@@ -17,9 +17,16 @@ class CallbackCredentialsProvider implements CredentialsProviderInterface
     /**
      * @param $id
      * @return mixed
+     * @throws CredentialsNotFoundException
      */
     public function loadCredentialsById($id)
     {
-        return call_user_func($this->callback, $id);
+        $result = call_user_func($this->callback, $id);
+
+        if (empty($result)) {
+            throw new CredentialsNotFoundException($id);
+        }
+
+        return $result;
     }
 }
