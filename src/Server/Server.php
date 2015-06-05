@@ -2,6 +2,7 @@
 
 namespace Dragooon\Hawk\Server;
 
+use Dragooon\Hawk\Credentials\Credentials;
 use Dragooon\Hawk\Credentials\CallbackCredentialsProvider;
 use Dragooon\Hawk\Credentials\CredentialsInterface;
 use Dragooon\Hawk\Credentials\CredentialsNotFoundException;
@@ -124,15 +125,7 @@ class Server implements ServerInterface
             }
         }
 
-        try {
-            $credentials = $this->credentialsProvider->loadCredentialsById($header->attribute('id'));
-
-            if (!$credentials->key()) {
-                throw new UnauthorizedException('Invalid Credentials (missing key)');
-            }
-        } catch (CredentialsNotFoundException $e) {
-            throw new UnauthorizedException('Credentials not found');
-        }
+        $credentials = $this->loadCredentialsById($header->attribute('id'));
 
         $calculatedMac = $this->crypto->calculateMac('header', $credentials, $artifacts);
 
@@ -293,16 +286,8 @@ class Server implements ServerInterface
             $ext
         );
 
-        try {
-            $credentials = $this->credentialsProvider->loadCredentialsById($id);
+        $credentials = $this->loadCredentialsById($id);
 
-            if (!$credentials->key()) {
-                throw new UnauthorizedException('Credentials invalid');
-            }
-        } catch (CredentialsNotFoundException $e) {
-            throw new UnauthorizedException('Credentials not found');
-        }
-        
         $calculatedMac = $this->crypto->calculateMac(
             'bewit',
             $credentials,
@@ -333,15 +318,7 @@ class Server implements ServerInterface
             throw new UnauthorizedException('Bad authorization');
         }
 
-        try {
-            $credentials = $this->credentialsProvider->loadCredentialsById($authorization->id());
-
-            if (!$credentials->key()) {
-                throw new UnauthorizedException('Credentials invalid');
-            }
-        } catch (CredentialsNotFoundException $e) {
-            throw new UnauthorizedException('Credentials not found');
-        }
+        $credentials = $this->loadCredentialsById($authorization->id());
 
         $artifacts = new Artifacts(
             null,
@@ -380,5 +357,27 @@ class Server implements ServerInterface
         }
 
         return new Response($credentials, $artifacts);
+    }
+
+    /**
+     * Loads a credential by ID
+     *
+     * @param int $id
+     * @return Credentials
+     * @throws UnauthorizedException
+     */
+    protected function loadCredentialsById($id)
+    {
+        try {
+            $credentials = $this->credentialsProvider->loadCredentialsById($id);
+
+            if (!$credentials->key()) {
+                throw new UnauthorizedException('Credentials invalid');
+            }
+
+            return $credentials;
+        } catch (CredentialsNotFoundException $e) {
+            throw new UnauthorizedException('Credentials not found');
+        }
     }
 }
