@@ -8,6 +8,8 @@ class HeaderFactory
      * @param string $fieldName
      * @param array $attributes
      * @return Header
+     * @throws FieldValueParserException
+     * @throws NotHawkAuthorizationException
      */
     public static function create($fieldName, array $attributes = null)
     {
@@ -31,15 +33,16 @@ class HeaderFactory
      * @param string $fieldName
      * @param mixed $fieldValue
      * @param array $requiredKeys
+     * @param array $validKeys
      * @return Header
      * @throws FieldValueParserException
      * @throws NotHawkAuthorizationException
      */
-    public static function createFromString($fieldName, $fieldValue, array $requiredKeys = null)
+    public static function createFromString($fieldName, $fieldValue, array $requiredKeys = null, array $validKeys = array())
     {
         return static::create(
             $fieldName,
-            HeaderParser::parseFieldValue($fieldValue, $requiredKeys)
+            HeaderParser::parseFieldValue($fieldValue, $requiredKeys, $validKeys)
         );
     }
 
@@ -48,6 +51,8 @@ class HeaderFactory
      * @param Header|string $headerObjectOrString
      * @param callback $onError
      * @return Header
+     * @throws FieldValueParserException
+     * @throws NotHawkAuthorizationException
      */
     public static function createFromHeaderObjectOrString($fieldName, $headerObjectOrString, $onError)
     {
