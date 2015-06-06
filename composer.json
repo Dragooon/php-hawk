@@ -31,7 +31,8 @@
     }
   },
   "require": {
-    "ircmaxell/random-lib": "^1.0@dev"
+    "ircmaxell/random-lib": "^1.0@dev",
+    "php": ">=5.4.0"
   },
   "require-dev": {
     "codeclimate/php-test-reporter": "~0.1@dev",
