@@ -3,10 +3,6 @@
 namespace Dragooon\Hawk\Server;
 
 use Dragooon\Hawk\Credentials\Credentials;
-use Dragooon\Hawk\Nonce\NonceProviderInterface;
-use Dragooon\Hawk\Time\ConstantTimeProvider;
-use Dragooon\Hawk\Time\TimeProviderInterface;
-use Dragooon\Hawk\Header\Header;
 use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Time\DefaultTimeProviderFactory;
 use Dragooon\Hawk\Message\Message;

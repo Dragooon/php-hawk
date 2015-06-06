@@ -3,7 +3,6 @@
 namespace Dragooon\Hawk\Server;
 
 use Dragooon\Hawk\Credentials\Credentials;
-use Dragooon\Hawk\Credentials\CallbackCredentialsProvider;
 use Dragooon\Hawk\Credentials\CredentialsInterface;
 use Dragooon\Hawk\Credentials\CredentialsNotFoundException;
 use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
@@ -11,7 +10,6 @@ use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Crypto\Crypto;
 use Dragooon\Hawk\Header\Header;
 use Dragooon\Hawk\Header\HeaderFactory;
-use Dragooon\Hawk\Nonce\CallbackNonceValidator;
 use Dragooon\Hawk\Nonce\NonceValidatorInterface;
 use Dragooon\Hawk\Time\TimeProviderInterface;
 use Dragooon\Hawk\Message\Message;
