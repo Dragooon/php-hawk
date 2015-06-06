@@ -15,9 +15,7 @@ class CallbackCredentialsProvider implements CredentialsProviderInterface
     }
 
     /**
-     * @param $id
-     * @return mixed
-     * @throws CredentialsNotFoundException
+     * {@inheritDoc}
      */
     public function loadCredentialsById($id)
     {

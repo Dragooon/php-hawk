@@ -3,6 +3,7 @@
 namespace Dragooon\Hawk\Client;
 
 use Dragooon\Hawk\Credentials\CredentialsInterface;
+use Dragooon\Hawk\Header\Header;
 
 interface ClientInterface
 {
@@ -19,7 +20,7 @@ interface ClientInterface
     /**
      * @param CredentialsInterface $credentials
      * @param Request $request
-     * @param \Dragooon\Hawk\Header\Header|string $headerObjectOrString Response header
+     * @param Header|string $headerObjectOrString Response header
      * @param array $options
      * @return bool
      * @throws \InvalidArgumentException

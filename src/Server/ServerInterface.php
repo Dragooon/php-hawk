@@ -4,6 +4,7 @@ namespace Dragooon\Hawk\Server;
 
 use Dragooon\Hawk\Credentials\CredentialsInterface;
 use Dragooon\Hawk\Crypto\Artifacts;
+use Dragooon\Hawk\Header\Header;
 use Dragooon\Hawk\Message\Message;
 
 interface ServerInterface
@@ -15,8 +16,9 @@ interface ServerInterface
      * @param mixed $resource
      * @param string $contentType
      * @param string $payload
-     * @param mixed $headerObjectOrString
-     * @return mixed
+     * @param Header|string $headerObjectOrString
+     * @return Response
+     * @throws UnauthorizedException
      */
     public function authenticate(
         $method,
@@ -32,7 +34,8 @@ interface ServerInterface
      * @param CredentialsInterface $credentials
      * @param Artifacts $artifacts
      * @param array $options
-     * @return mixed
+     * @return Header
+     * @throws \InvalidArgumentException
      */
     public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = []);
 
@@ -41,7 +44,7 @@ interface ServerInterface
      * @param string $payload
      * @param string $contentType
      * @param string $hash
-     * @return mixed
+     * @return bool
      */
     public function authenticatePayload(
         CredentialsInterface $credentials,

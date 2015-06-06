@@ -45,7 +45,7 @@ class HeaderFactory
 
     /**
      * @param string $fieldName
-     * @param mixed $headerObjectOrString
+     * @param Header|string $headerObjectOrString
      * @param callback $onError
      * @return Header
      */

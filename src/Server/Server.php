@@ -49,15 +49,7 @@ class Server implements ServerInterface
     }
 
     /**
-     * @param string $method
-     * @param string $host
-     * @param int $port
-     * @param mixed $resource
-     * @param string $contentType
-     * @param string $payload
-     * @param mixed $headerObjectOrString
-     * @return Response
-     * @throws UnauthorizedException
+     * {@inheritDoc}
      */
     public function authenticate(
         $method,
@@ -146,11 +138,7 @@ class Server implements ServerInterface
     }
 
     /**
-     * @param CredentialsInterface $credentials
-     * @param Artifacts $artifacts
-     * @param array $options
-     * @return Header
-     * @throws \InvalidArgumentException
+     * {@inheritDoc}
      */
     public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = [])
     {
@@ -201,11 +189,7 @@ class Server implements ServerInterface
     }
 
     /**
-     * @param CredentialsInterface $credentials
-     * @param string $payload
-     * @param string $contentType
-     * @param string $hash
-     * @return bool
+     * {@inheritDoc}
      */
     public function authenticatePayload(
         CredentialsInterface $credentials,
@@ -220,11 +204,7 @@ class Server implements ServerInterface
     }
 
     /**
-     * @param string $host
-     * @param int $port
-     * @param string $resource
-     * @return Response
-     * @throws UnauthorizedException
+     * {@inheritDoc}
      */
     public function authenticateBewit($host, $port, $resource)
     {
@@ -284,14 +264,7 @@ class Server implements ServerInterface
     }
 
     /**
-     * Authenticates a single message from a client
-     *
-     * @param string $host
-     * @param int $port
-     * @param string $message
-     * @param Message $authorization
-     * @return Response
-     * @throws UnauthorizedException
+     * {@inheritDoc}
      */
     public function authenticateMessage($host, $port, $message, Message $authorization)
     {

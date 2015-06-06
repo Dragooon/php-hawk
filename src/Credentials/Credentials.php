@@ -9,9 +9,9 @@ class Credentials implements CredentialsInterface
     private $id;
 
     /**
-     * @param $key
+     * @param string $key
      * @param string $algorithm
-     * @param mixed $id
+     * @param string $id
      * @throws \InvalidArgumentException
      */
     public function __construct($key, $algorithm = 'sha256', $id = null)

@@ -5,8 +5,8 @@ namespace Dragooon\Hawk\Credentials;
 interface CredentialsProviderInterface
 {
     /**
-     * @param $id
-     * @return mixed
+     * @param mixed $id
+     * @return Credentials
      * @throws CredentialsNotFoundException
      */
     public function loadCredentialsById($id);
