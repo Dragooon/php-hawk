@@ -5,9 +5,6 @@ namespace Dragooon\Hawk\Client;
 use Dragooon\Hawk\Credentials\Credentials;
 use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Header\Header;
-use Dragooon\Hawk\Nonce\NonceProviderInterface;
-use Dragooon\Hawk\Time\TimeProviderInterface;
-use Dragooon\Hawk\Header\HeaderFactory;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
 {

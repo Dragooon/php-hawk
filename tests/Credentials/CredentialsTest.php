@@ -2,10 +2,6 @@
 
 namespace Dragooon\Hawk\Credentials;
 
-use Dragooon\Hawk\Credentials\Credentials;
-use Dragooon\Hawk\Nonce\NonceProviderInterface;
-use Dragooon\Hawk\Time\TimeProviderInterface;
-
 class CredentialsTest extends \PHPUnit_Framework_TestCase
 {
     /**
