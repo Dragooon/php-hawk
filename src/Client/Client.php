@@ -37,12 +37,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param CredentialsInterface $credentials
-     * @param $uri
-     * @param $method
-     * @param array $options
-     * @return Request
-     * @throws \InvalidArgumentException
+     * {@inheritDoc}
      */
     public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = array())
     {
@@ -118,11 +113,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param CredentialsInterface $credentials
-     * @param Request $request
-     * @param mixed $headerObjectOrString Response header
-     * @param array $options
-     * @return bool
+     * {@inheritDoc}
      */
     public function authenticate(
         CredentialsInterface $credentials,
@@ -186,11 +177,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * @param CredentialsInterface $credentials
-     * @param $uri
-     * @param $ttlSec
-     * @param array $options
-     * @return mixed
+     * {@inheritDoc}
      */
     public function createBewit(CredentialsInterface $credentials, $uri, $ttlSec, array $options = array())
     {
@@ -230,15 +217,7 @@ class Client implements ClientInterface
     }
 
     /**
-     * Generate an authorization string for a message
-     *
-     * @param CredentialsInterface $credentials
-     * @param string $host
-     * @param int $port
-     * @param string $message
-     * @param array $options
-     * @return Message
-     * @throws \InvalidArgumentException
+     * {@inheritDpc}
      */
     public function createMessage(CredentialsInterface $credentials, $host, $port, $message, array $options = array())
     {
