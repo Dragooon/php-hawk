@@ -13,10 +13,9 @@ class UnauthorizedException extends \Exception
      * @param string $message
      * @param array $attributes
      */
-    public function __construct($message = null, array $attributes = null)
+    public function __construct($message = null, array $attributes = array())
     {
         parent::__construct($message);
-        $this->attributes = $attributes ?: array();
     }
 
     /**
