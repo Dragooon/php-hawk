@@ -30,14 +30,14 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
 
     public function payloadDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=',
                 '{"type":"https://tent.io/types/status/v0#"}',
                 'sha256',
                 'application/vnd.tent.post.v0+json'
-            )
-        );
+            ]
+        ];
     }
 
     /**
@@ -65,7 +65,7 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
             'exqbZWtykFZIh2D7cXi9dA'
         );
 
-        $tentTestVectorsAttributes = array(
+        $tentTestVectorsAttributes = [
             'method' => 'POST',
             'host' => 'example.com',
             'port' => 443,
@@ -75,10 +75,10 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
             'payload' => '{"type":"https://tent.io/types/status/v0#"}',
             'content_type' => 'application/vnd.tent.post.v0+json',
             'hash' => 'neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=',
-        );
+        ];
 
-        return array(
-            array(
+        return [
+            [
 
                 //
                 // App request w/hash
@@ -101,8 +101,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
                     $tentTestVectorsAttributes['hash'],
                     'wn6yzHGe5TLaT-fvOPbAyQ'
                 ),
-            ),
-            array(
+            ],
+            [
 
                 //
                 // Server Response (App request w/hash)
@@ -125,8 +125,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
                     null,
                     'wn6yzHGe5TLaT-fvOPbAyQ'
                 ),
-            ),
-            array(
+            ],
+            [
 
                 //
                 // Relationship Request
@@ -144,8 +144,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
                     $tentTestVectorsAttributes['timestamp'],
                     $tentTestVectorsAttributes['nonce']
                 ),
-            ),
-            array(
+            ],
+            [
 
                 //
                 // Server Response w/ hash (Relationship Request)
@@ -167,8 +167,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
                     $tentTestVectorsAttributes['content_type'],
                     $tentTestVectorsAttributes['hash']
                 ),
-            ),
-            array(
+            ],
+            [
 
                 //
                 // Bewit (GET /posts)
@@ -186,8 +186,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
                     $tentTestVectorsAttributes['timestamp'],
                     ''
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -214,7 +214,7 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
             'exqbZWtykFZIh2D7cXi9dA'
         );
 
-        $tentTestVectorsAttributes = array(
+        $tentTestVectorsAttributes = [
             'method' => 'POST',
             'host' => 'example.com',
             'port' => 443,
@@ -224,15 +224,15 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
             'payload' => '{"type":"https://tent.io/types/status/v0#"}',
             'content_type' => 'application/vnd.tent.post.v0+json',
             'hash' => 'neQFHgYKl/jFqDINrC21uLS0gkFglTz789rzcSr7HYU=',
-        );
+        ];
 
-        return array(
-            array(
+        return [
+            [
                 'HPDcD5S3Kw7LM/oyoXKcgv2Z30RnOLAI5ebXpYDGfo4=',
 
                 $tentTestVectorsAttributes['timestamp'],
                 $tentTestVectorsCredentials,
-            ),
-        );
+            ],
+        ];
     }
 }
