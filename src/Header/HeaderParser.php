@@ -12,7 +12,7 @@ class HeaderParser
      * @throws FieldValueParserException
      * @throws NotHawkAuthorizationException
      */
-    public static function parseFieldValue($fieldValue, array $requiredKeys = null, array $validKeys = array())
+    public static function parseFieldValue($fieldValue, array $requiredKeys = null, array $validKeys = [])
     {
         if (0 !== strpos($fieldValue, 'Hawk')) {
             throw new NotHawkAuthorizationException;

@@ -38,7 +38,7 @@ class HeaderFactory
      * @throws FieldValueParserException
      * @throws NotHawkAuthorizationException
      */
-    public static function createFromString($fieldName, $fieldValue, array $requiredKeys = null, array $validKeys = array())
+    public static function createFromString($fieldName, $fieldValue, array $requiredKeys = null, array $validKeys = [])
     {
         return static::create(
             $fieldName,

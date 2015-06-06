@@ -25,7 +25,7 @@ class HeaderParserTest extends \PHPUnit_Framework_TestCase
     {
         try {
             $header = 'Hawk id="123456", ts="1353809207", hash="bsvY3IfUllw6V5rvk4tStEvpBhE=", ext="Bazinga!", mac="qbf1ZPG/r/e06F4ht+T77LXi5vw="';
-            HeaderParser::parseFieldValue($header, array('id', 'nonce', 'hash'));
+            HeaderParser::parseFieldValue($header, ['id', 'nonce', 'hash']);
             $this->fail('Should throw an exception for missing required values');
         } catch (FieldValueParserException $e) {
         }
@@ -39,7 +39,7 @@ class HeaderParserTest extends \PHPUnit_Framework_TestCase
     public function shouldTestParseFieldValue()
     {
         $header = 'Hawk id="123456", ts="1353809207", nonce="Ygvqdz", hash="bsvY3IfUllw6V5rvk4tStEvpBhE=", ext="Bazinga!", mac="qbf1ZPG/r/e06F4ht+T77LXi5vw="';
-        $header = HeaderParser::parseFieldValue($header, array('id', 'ts'));
+        $header = HeaderParser::parseFieldValue($header, ['id', 'ts']);
 
         $this->assertTrue(is_array($header));
         $this->assertEquals(123456, $header['id']);

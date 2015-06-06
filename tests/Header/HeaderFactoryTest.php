@@ -36,7 +36,7 @@ class HeaderFactoryTest extends \PHPUnit_Framework_TestCase
 
         $header = HeaderFactory::createFromHeaderObjectOrString(
             'Test',
-            new Header('Test', 'Hawk id="123456"', array('id' => 123456)),
+            new Header('Test', 'Hawk id="123456"', ['id' => 123456]),
             function() {
             }
         );
