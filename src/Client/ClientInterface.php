@@ -19,7 +19,7 @@ interface ClientInterface
     /**
      * @param CredentialsInterface $credentials
      * @param Request $request
-     * @param mixed $headerObjectOrString Response header
+     * @param \Dragooon\Hawk\Header\Header|string $headerObjectOrString Response header
      * @param array $options
      * @return bool
      * @throws \InvalidArgumentException
