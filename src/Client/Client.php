@@ -39,7 +39,7 @@ class Client implements ClientInterface
     /**
      * {@inheritDoc}
      */
-    public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = array())
+    public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = [])
     {
         if (empty($method) || !is_string($method)) {
             throw new \InvalidArgumentException('Specified method is invalid');
@@ -119,7 +119,7 @@ class Client implements ClientInterface
         CredentialsInterface $credentials,
         Request $request,
         $headerObjectOrString,
-        array $options = array()
+        array $options = []
     )
     {
         $header = HeaderFactory::createFromHeaderObjectOrString(
@@ -179,7 +179,7 @@ class Client implements ClientInterface
     /**
      * {@inheritDoc}
      */
-    public function createBewit(CredentialsInterface $credentials, $uri, $ttlSec, array $options = array())
+    public function createBewit(CredentialsInterface $credentials, $uri, $ttlSec, array $options = [])
     {
         $timestamp = isset($options['timestamp']) ? $options['timestamp'] : $this->timeProvider->createTimestamp();
         if ($this->localtimeOffset) {
@@ -202,24 +202,24 @@ class Client implements ClientInterface
             $ext
         );
 
-        $bewit = implode('\\', array(
+        $bewit = implode('\\', [
             $credentials->id(),
             $exp,
             $this->crypto->calculateMac('bewit', $credentials, $artifacts),
             $ext,
-        ));
+        ]);
 
         return str_replace(
-            array('+', '/', '=', "\n"),
-            array('-', '_', '', ''),
+            ['+', '/', '=', "\n"],
+            ['-', '_', '', ''],
             base64_encode($bewit)
         );
     }
 
     /**
-     * {@inheritDpc}
+     * {@inheritDoc}
      */
-    public function createMessage(CredentialsInterface $credentials, $host, $port, $message, array $options = array())
+    public function createMessage(CredentialsInterface $credentials, $host, $port, $message, array $options = [])
     {
         if (empty($host) || empty($port) || !is_numeric($port)) {
             throw new \InvalidArgumentException('Invalid host or port specified');
@@ -281,6 +281,6 @@ class Client implements ClientInterface
 
         $port = isset($parsed['port']) ? $parsed['port'] : ($parsed['scheme'] === 'https' ? 443 : 80);
 
-        return array($host, $resource, $port);
+        return [$host, $resource, $port];
     }
 }

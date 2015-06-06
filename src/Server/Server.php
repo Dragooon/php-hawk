@@ -99,7 +99,7 @@ class Server implements ServerInterface
             $header->attribute('dlg')
         );
 
-        foreach (array('id', 'ts', 'nonce', 'mac') as $requiredAttribute) {
+        foreach (['id', 'ts', 'nonce', 'mac'] as $requiredAttribute) {
             if (strlen($header->attribute($requiredAttribute)) == 0) {
                 throw new UnauthorizedException('Missing attributes');
             }
@@ -139,7 +139,7 @@ class Server implements ServerInterface
             $ts = $this->timeProvider->createTimestamp() + $this->localtimeOffsetSec;
             $tsm = $this->crypto->calculateTsMac($ts, $credentials);
 
-            throw new UnauthorizedException('Stale timestamp', array('ts' => $ts, 'tsm' => $tsm));
+            throw new UnauthorizedException('Stale timestamp', ['ts' => $ts, 'tsm' => $tsm]);
         }
 
         return new Response($credentials, $artifacts);
@@ -152,7 +152,7 @@ class Server implements ServerInterface
      * @return Header
      * @throws \InvalidArgumentException
      */
-    public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = array())
+    public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = [])
     {
         if (!$credentials->key()) {
             throw new \InvalidARgumentException('Invalid credentials (missing key)');
@@ -185,9 +185,9 @@ class Server implements ServerInterface
             $artifacts->dlg()
         );
 
-        $attributes = array(
+        $attributes = [
             'mac' => $this->crypto->calculateMac('response', $credentials, $responseArtifacts),
-        );
+        ];
 
         if ($hash !== null) {
             $attributes['hash'] = $hash;
@@ -242,8 +242,8 @@ class Server implements ServerInterface
         }
 
         $bewit = base64_decode(str_replace(
-            array('-', '_', '', ''),
-            array('+', '/', '=', "\n"),
+            ['-', '_', '', ''],
+            ['+', '/', '=', "\n"],
             $resourceParts[3]
         ));
 
@@ -336,7 +336,7 @@ class Server implements ServerInterface
             $ts = $this->timeProvider->createTimestamp() + $this->localtimeOffsetSec;
             $tsm = $this->crypto->calculateTsMac($ts, $credentials);
 
-            throw new UnauthorizedException('Stale timestamp', array('ts' => $ts, 'tsm' => $tsm));
+            throw new UnauthorizedException('Stale timestamp', ['ts' => $ts, 'tsm' => $tsm]);
         }
 
         return new Response($credentials, $artifacts);

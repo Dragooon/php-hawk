@@ -13,11 +13,11 @@ class Header
      * @param string $fieldValue
      * @param array $attributes
      */
-    public function __construct($fieldName, $fieldValue, array $attributes = null)
+    public function __construct($fieldName, $fieldValue, array $attributes = [])
     {
         $this->fieldName = $fieldName;
         $this->fieldValue = $fieldValue;
-        $this->attributes = $attributes ?: array();
+        $this->attributes = $attributes;
     }
 
     /**
@@ -46,7 +46,7 @@ class Header
             return $this->attributes;
         }
 
-        $attributes = array();
+        $attributes = [];
         foreach ($keys as $key) {
             if (isset($this->attributes[$key])) {
                 $attributes[$key] = $this->attributes[$key];

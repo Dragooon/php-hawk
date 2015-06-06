@@ -17,7 +17,7 @@ class HeaderParser
             throw new NotHawkAuthorizationException;
         }
 
-        $attributes = array();
+        $attributes = [];
         $fieldValue = substr($fieldValue, 5);
         foreach (explode(', ', $fieldValue) as $part) {
             $equalsPos = strpos($part, '=');
@@ -27,7 +27,7 @@ class HeaderParser
         }
 
         if (null !== $requiredKeys) {
-            $missingKeys = array();
+            $missingKeys = [];
             foreach ($requiredKeys as $requiredKey) {
                 if (!isset($attributes[$requiredKey])) {
                     $missingKeys[] = $requiredKey;

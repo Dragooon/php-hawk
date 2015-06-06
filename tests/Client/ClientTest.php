@@ -27,9 +27,9 @@ class ClientTest extends \PHPUnit_Framework_TestCase
                 $tentTestVectorsCredentials,
                 'https://example.com/posts',
                 0,
-                array(
+                [
                     'timestamp' => 1368996800,
-                )
+                ]
             )
         );
     }
@@ -238,7 +238,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $credentials,
             new Request($blankHeader, $artifacts),
             'Hawk mac="XIJRsMl/4oL+nn+vKoeVZPdCHXB4yJkNnBbTbHFZUYE=", hash="f9cDF/TDm7TkYRLnGwRMfeDzT6LixQVLvrIKhh0vgmM=", ext="response-specific"',
-            array('content_type' => 'text/plain')
+            ['content_type' => 'text/plain']
         );
         $this->assertTrue($test, 'Should successfully authenticate');
 
@@ -256,7 +256,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $credentials,
             new Request($blankHeader, $artifacts),
             'Hawk mac="9lE3eaJZQof5GnxjM0eQZmtJ3M/GrqKVaX1dUI3zuO8=", hash="vcngjQGyNJQ/Q3y/voD1FNW1h1xK1D/EGCvIH86cfu0=", ext="response-specific',
-            array('content_type' => 'text/plain', 'payload' => 'This is amazing')
+            ['content_type' => 'text/plain', 'payload' => 'This is amazing']
         );
         $this->assertTrue($test, 'Should successfully authenticate');
 
@@ -274,7 +274,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             $credentials,
             new Request($blankHeader, $artifacts),
             'Hawk mac="9lE3eaJZQof5GnxjM0eQZmtJ3M/GrqKVaX1dUI3zuO8=", hash="vcngjQGyNJQ/Q3y/voD1FNW1h1xK1D/EGCvIH86cfu0=", ext="response-specific',
-            array('content_type' => 'text/plain', 'payload' => 'This is amazing')
+            ['content_type' => 'text/plain', 'payload' => 'This is amazing']
         );
         $this->assertFalse($test, 'Should not authenticate');
     }

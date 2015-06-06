@@ -14,7 +14,7 @@ interface ClientInterface
      * @return Request
      * @throws \InvalidArgumentException
      */
-    public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = array());
+    public function createRequest(CredentialsInterface $credentials, $uri, $method, array $options = []);
 
     /**
      * @param CredentialsInterface $credentials
@@ -28,7 +28,7 @@ interface ClientInterface
         CredentialsInterface $credentials,
         Request $request,
         $headerObjectOrString,
-        array $options = array()
+        array $options = []
     );
 
     /**
@@ -38,7 +38,7 @@ interface ClientInterface
      * @param array $options
      * @return string
      */
-    public function createBewit(CredentialsInterface $credentials, $uri, $ttlSec, array $options = array());
+    public function createBewit(CredentialsInterface $credentials, $uri, $ttlSec, array $options = []);
 
 
     /**
@@ -52,6 +52,6 @@ interface ClientInterface
      * @return \Dragooon\Hawk\Message\Message
      * @throws \InvalidArgumentException
      */
-    public function createMessage(CredentialsInterface $credentials, $host, $port, $message, array $options = array());
+    public function createMessage(CredentialsInterface $credentials, $host, $port, $message, array $options = []);
 
 }

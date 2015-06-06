@@ -34,7 +34,7 @@ interface ServerInterface
      * @param array $options
      * @return mixed
      */
-    public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = array());
+    public function createHeader(CredentialsInterface $credentials, Artifacts $artifacts, array $options = []);
 
     /**
      * @param CredentialsInterface $credentials
