@@ -33,33 +33,13 @@ class Server implements ServerInterface
      */
     public function __construct(
         Crypto $crypto,
-        $credentialsProvider,
+        CredentialsProviderInterface $credentialsProvider,
         TimeProviderInterface $timeProvider,
-        $nonceValidator,
+        NonceValidatorInterface $nonceValidator,
         $timestampSkewSec,
         $localtimeOffsetSec
     )
     {
-        if (!$credentialsProvider instanceof CredentialsProviderInterface) {
-            if (is_callable($credentialsProvider)) {
-                $credentialsProvider = new CallbackCredentialsProvider($credentialsProvider);
-            } else {
-                throw new \InvalidArgumentException(
-                    "Credentials provider must implement CredentialsProviderInterface or must be callable"
-                );
-            }
-        }
-
-        if (!$nonceValidator instanceof NonceValidatorInterface) {
-            if (is_callable($nonceValidator)) {
-                $nonceValidator = new CallbackNonceValidator($nonceValidator);
-            } else {
-                throw new \InvalidArgumentException(
-                    "Nonce validator must implement NonceValidatorInterface or must be callable"
-                );
-            }
-        }
-
         $this->crypto = $crypto;
         $this->credentialsProvider = $credentialsProvider;
         $this->timeProvider = $timeProvider;
@@ -74,7 +54,7 @@ class Server implements ServerInterface
      * @param int $port
      * @param mixed $resource
      * @param string $contentType
-     * @param mixed $payload
+     * @param string $payload
      * @param mixed $headerObjectOrString
      * @return Response
      * @throws UnauthorizedException

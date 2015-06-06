@@ -3,6 +3,8 @@
 namespace Dragooon\Hawk\Server;
 
 use Dragooon\Hawk\Crypto\Crypto;
+use Dragooon\Hawk\Nonce\CallbackNonceValidator;
+use Dragooon\Hawk\Nonce\NonceValidatorInterface;
 use Dragooon\Hawk\Time\DefaultTimeProviderFactory;
 use Dragooon\Hawk\Time\TimeProviderInterface;
 use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
@@ -19,7 +21,7 @@ class ServerBuilder
     /**
      * @param CredentialsProviderInterface $credentialsProvider
      */
-    public function __construct($credentialsProvider)
+    public function __construct(CredentialsProviderInterface $credentialsProvider)
     {
         $this->credentialsProvider = $credentialsProvider;
     }
@@ -47,10 +49,10 @@ class ServerBuilder
     }
 
     /**
-     * @param $nonceValidator
+     * @param NonceValidatorInterface $nonceValidator
      * @return $this
      */
-    public function setNonceValidator($nonceValidator)
+    public function setNonceValidator(NonceValidatorInterface $nonceValidator)
     {
         $this->nonceValidator = $nonceValidator;
 
@@ -61,7 +63,7 @@ class ServerBuilder
      * @param int $timestampSkewSec
      * @return $this
      */
-    public function setTimestampSkewSec($timestampSkewSec = null)
+    public function setTimestampSkewSec($timestampSkewSec)
     {
         $this->timestampSkewSec = $timestampSkewSec;
 
@@ -72,7 +74,7 @@ class ServerBuilder
      * @param int $localtimeOffsetSec
      * @return $this
      */
-    public function setLocaltimeOffsetSec($localtimeOffsetSec = null)
+    public function setLocaltimeOffsetSec($localtimeOffsetSec)
     {
         $this->localtimeOffsetSec = $localtimeOffsetSec;
 
@@ -86,9 +88,11 @@ class ServerBuilder
     {
         $crypto = $this->crypto ?: new Crypto;
         $timeProvider = $this->timeProvider ?: DefaultTimeProviderFactory::create();
-        $nonceValidator = $this->nonceValidator ?: function($nonce, $timestamp) {
-            return true;
-        };
+        $nonceValidator = $this->nonceValidator ?: new CallbackNonceValidator(
+            function($nonce, $timestamp) {
+                return true;
+            }
+        );
         $timestampSkewSec = $this->timestampSkewSec ?: 60;
         $localtimeOffsetSec = $this->localtimeOffsetSec ?: 0;
 
@@ -106,7 +110,7 @@ class ServerBuilder
      * @param CredentialsProviderInterface $credentialsProvider
      * @return static
      */
-    public static function create($credentialsProvider)
+    public static function create(CredentialsProviderInterface $credentialsProvider)
     {
         return new static($credentialsProvider);
     }

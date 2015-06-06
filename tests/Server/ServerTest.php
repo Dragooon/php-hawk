@@ -3,7 +3,9 @@
 namespace Dragooon\Hawk\Server;
 
 use Dragooon\Hawk\Credentials\Credentials;
+use Dragooon\Hawk\Credentials\CallbackCredentialsProvider;
 use Dragooon\Hawk\Crypto\Artifacts;
+use Dragooon\Hawk\Nonce\CallbackNonceValidator;
 use Dragooon\Hawk\Time\DefaultTimeProviderFactory;
 use Dragooon\Hawk\Message\Message;
 
@@ -23,14 +25,16 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     public function shouldAuthenticateBewit($host, $port, $resource, $localTimeOffsetSec, $expected, $message)
     {
         $key = 'HX9QcbD-r3ItFEnRcAuOSg';
-        $credentialsProvider = function ($id) use ($key)
-        {
-            return new Credentials(
-                $key,
-                'sha256',
-                'exqbZWtykFZIh2D7cXi9dA'
-            );
-        };
+        $credentialsProvider = new CallbackCredentialsProvider(
+            function ($id) use ($key)
+            {
+                return new Credentials(
+                    $key,
+                    'sha256',
+                    'exqbZWtykFZIh2D7cXi9dA'
+                );
+            }
+        );
 
         $server = ServerBuilder::create($credentialsProvider)
             ->setLocalTimeOffsetSec($localTimeOffsetSec)
@@ -102,10 +106,12 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     public function shouldTestHeader(Credentials $credentials, Artifacts $artifacts, array $options, $expectedHeader, $message)
     {
         $server = ServerBuilder::create(
-            function($id) {
-                // We don't need this for testing header
-                return false;
-            }
+            new CallbackCredentialsProvider(
+                function($id) {
+                    // We don't need this for testing header
+                    return false;
+                }
+            )
         )->build();
 
         if ($expectedHeader === false) {
@@ -182,13 +188,15 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $key = 'werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn';
 
         $serverBuilder = ServerBuilder::create(
-            function($id) use ($key) {
-                return new Credentials(
-                    $key,
-                    $id == 1 ? 'sha1' : 'sha256',
-                    $id
-                );
-            }
+            new CallbackCredentialsProvider(
+                function($id) use ($key) {
+                    return new Credentials(
+                        $key,
+                        $id == 1 ? 'sha1' : 'sha256',
+                        $id
+                    );
+                }
+            )
         );
 
         if (!empty($localTimeOffsetSec)) {
@@ -369,24 +377,28 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $key = 'werxhqb98rpaxn39848xrunpaw3489ruxnpa98w4rxn';
 
         $serverBuilder = ServerBuilder::create(
-            function($id) use ($key) {
-                return new Credentials(
-                    $key,
-                    $id == 1 ? 'sha1' : 'sha256',
-                    $id
-                );
-            }
+            new CallbackCredentialsProvider(
+                function($id) use ($key) {
+                    return new Credentials(
+                        $key,
+                        $id == 1 ? 'sha1' : 'sha256',
+                        $id
+                    );
+                }
+            )
         );
 
         $serverBuilder->setNonceValidator(
-            function($nonce, $timestamp) {
-                static $memory = array();
-                if (isset($memory[$nonce])) {
-                    throw new UnauthorizedException('Invalid nonce');
+            new CallbackNonceValidator(
+                function($nonce, $timestamp) {
+                    static $memory = array();
+                    if (isset($memory[$nonce])) {
+                        throw new UnauthorizedException('Invalid nonce');
+                    }
+                    $memory[$nonce] = $timestamp;
+                    return true;
                 }
-                $memory[$nonce] = $timestamp;
-                return true;
-            }
+            )
         );
         $serverBuilder->setLocaltimeOffsetSec(1353788437 - time());
 
@@ -429,13 +441,15 @@ class ServerTest extends \PHPUnit_Framework_TestCase
         $key = '2983d45yun89q';
 
         $serverBuilder = ServerBuilder::create(
-            function($id) use ($key) {
-                return new Credentials(
-                    $key,
-                    $id == 1 ? 'sha1' : 'sha256',
-                    $id
-                );
-            }
+            new CallbackCredentialsProvider(
+                function($id) use ($key) {
+                    return new Credentials(
+                        $key,
+                        $id == 1 ? 'sha1' : 'sha256',
+                        $id
+                    );
+                }
+            )
         );
 
         if (!empty($localTimeOffsetSec)) {
