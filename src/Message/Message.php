@@ -65,4 +65,46 @@ class Message
     {
         return $this->mac;
     }
+
+    /**
+     * Generates a serialized (json_encoded) version of the message for transport
+     *
+     * @return string
+     */
+    public function serialized()
+    {
+        return json_encode(
+            [
+                'id' => $this->id,
+                'timestamp' => $this->timestamp,
+                'nonce' => $this->nonce,
+                'hash' => $this->hash,
+                'mac' => $this->mac,
+            ]
+        );
+    }
+
+    /**
+     * Takes a serialized (json_encoded) string and returns it's Message object
+     *
+     * @param string $serialized
+     * @return Message
+     * @throws \InvalidArgumentException
+     */
+    public static function createFromSerialized($serialized)
+    {
+        $unserialized = json_decode($serialized, true);
+        if (!$unserialized || empty($unserialized['id']) || empty($unserialized['timestamp']) || empty($unserialized['nonce'])
+            || empty($unserialized['hash']) || empty($unserialized['mac'])) {
+            throw new \InvalidArgumentException('Invalid serialized string passed');
+        }
+
+        return new Message(
+            $unserialized['id'],
+            $unserialized['timestamp'],
+            $unserialized['nonce'],
+            $unserialized['hash'],
+            $unserialized['mac']
+        );
+    }
 }
