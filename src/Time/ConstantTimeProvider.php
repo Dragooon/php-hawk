@@ -15,7 +15,7 @@ class ConstantTimeProvider implements TimeProviderInterface
     }
 
     /**
-     * @return int
+     * {@inheritDoc}
      */
     public function createTimestamp()
     {

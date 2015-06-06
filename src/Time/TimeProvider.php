@@ -5,7 +5,7 @@ namespace Dragooon\Hawk\Time;
 class TimeProvider implements TimeProviderInterface
 {
     /**
-     * @return int
+     * {@inheritDoc}
      */
     public function createTimestamp()
     {
