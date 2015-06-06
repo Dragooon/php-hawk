@@ -2,8 +2,6 @@
 
 namespace Dragooon\Hawk\Credentials;
 
-use Dragooon\Hawk\Credentials\CredentialsNotFoundException;
-
 interface CredentialsProviderInterface
 {
     /**

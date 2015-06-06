@@ -26,7 +26,7 @@ class Credentials implements CredentialsInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritDoc}
      */
     public function id()
     {
@@ -34,7 +34,7 @@ class Credentials implements CredentialsInterface
     }
 
     /**
-     * @return mixed
+     * {@inheritDoc}
      */
     public function key()
     {
@@ -42,7 +42,7 @@ class Credentials implements CredentialsInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function algorithm()
     {

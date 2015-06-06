@@ -7,7 +7,7 @@ interface NonceValidatorInterface
     /**
      * @param string $nonce
      * @param int $timestamp
-     * @return mixed
+     * @return bool
      */
     public function validateNonce($nonce, $timestamp);
 }

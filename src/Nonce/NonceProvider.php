@@ -17,7 +17,7 @@ class NonceProvider implements NonceProviderInterface
     }
 
     /**
-     * @return string
+     * {@inheritDoc}
      */
     public function createNonce()
     {

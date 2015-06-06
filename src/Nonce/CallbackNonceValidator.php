@@ -15,9 +15,7 @@ class CallbackNonceValidator implements NonceValidatorInterface
     }
 
     /**
-     * @param mixed $nonce
-     * @param int $timestamp
-     * @return mixed
+     * {@inheritDoc}
      */
     public function validateNonce($nonce, $timestamp)
     {
