@@ -19,9 +19,9 @@ class Crypto
         list ($contentType) = explode(';', $contentType);
         $contentType = strtolower(trim($contentType));
 
-        $normalized = 'hawk.'.self::HEADER_VERSION.'.payload'."\n".
-            $contentType."\n".
-            $payload."\n";
+        $normalized = 'hawk.' . self::HEADER_VERSION . '.payload' . "\n" .
+            $contentType . "\n" .
+            $payload . "\n";
 
         return base64_encode(hash($algorithm, $normalized, true));
     }
@@ -46,8 +46,8 @@ class Crypto
      */
     public function calculateTsMac($ts, CredentialsInterface $credentials)
     {
-        $normalized = 'hawk.'.self::HEADER_VERSION.'.ts'."\n".
-            $ts."\n";
+        $normalized = 'hawk.' . self::HEADER_VERSION . '.ts' . "\n" .
+            $ts . "\n";
 
         return base64_encode(hash_hmac(
             $credentials->algorithm(),
@@ -85,14 +85,14 @@ class Crypto
      */
     private function generateNormalizedString($type, Artifacts $attributes)
     {
-        $normalized = 'hawk.'.self::HEADER_VERSION.'.'.$type."\n".
-            $attributes->timestamp()."\n".
-            $attributes->nonce()."\n".
-            strtoupper($attributes->method())."\n".
-            $attributes->resource()."\n".
-            strtolower($attributes->host())."\n".
-            $attributes->port()."\n".
-            $attributes->hash()."\n";
+        $normalized = 'hawk.' . self::HEADER_VERSION . '.' . $type . "\n" .
+            $attributes->timestamp() . "\n" .
+            $attributes->nonce() . "\n" .
+            strtoupper($attributes->method()) . "\n" .
+            $attributes->resource() . "\n" .
+            strtolower($attributes->host()) . "\n" .
+            $attributes->port() . "\n" .
+            $attributes->hash() . "\n";
 
         if ($attributes->ext()) {
             // TODO: escape ext
@@ -102,8 +102,8 @@ class Crypto
         $normalized .= "\n";
 
         if ($attributes->app()) {
-            $normalized .= $attributes->app()."\n".
-                $attributes->dlg()."\n";
+            $normalized .= $attributes->app() . "\n" .
+                $attributes->dlg() . "\n";
         }
 
         return $normalized;

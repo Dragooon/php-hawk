@@ -40,7 +40,8 @@ class Server implements ServerInterface
         $nonceValidator,
         $timestampSkewSec,
         $localtimeOffsetSec
-    ) {
+    )
+    {
         if (!$credentialsProvider instanceof CredentialsProviderInterface) {
             if (is_callable($credentialsProvider)) {
                 $credentialsProvider = new CallbackCredentialsProvider($credentialsProvider);
@@ -88,7 +89,8 @@ class Server implements ServerInterface
         $contentType = null,
         $payload = null,
         $headerObjectOrString = null
-    ) {
+    )
+    {
         if (null === $headerObjectOrString) {
             throw new UnauthorizedException("Missing Authorization header");
         }
@@ -232,7 +234,8 @@ class Server implements ServerInterface
         $payload,
         $contentType,
         $hash
-    ) {
+    )
+    {
         $calculatedHash = $this->crypto->calculatePayloadHash($payload, $credentials->algorithm(), $contentType);
 
         return $this->crypto->fixedTimeComparison($calculatedHash, $hash);
@@ -254,7 +257,8 @@ class Server implements ServerInterface
             '/^(\/.*)([\?&])bewit\=([^&$]*)(?:&(.+))?$/',
             $resource,
             $resourceParts
-        )) {
+        )
+        ) {
             // TODO: Should this do something else?
             throw new UnauthorizedException('Malformed resource or does not contan bewit');
         }
@@ -273,7 +277,7 @@ class Server implements ServerInterface
 
         $resource = $resourceParts[1];
         if (isset($resourceParts[4])) {
-            $resource .= $resourceParts[2].$resourceParts[4];
+            $resource .= $resourceParts[2] . $resourceParts[4];
         }
 
         $artifacts = new Artifacts(
@@ -314,7 +318,8 @@ class Server implements ServerInterface
     public function authenticateMessage($host, $port, $message, Message $authorization)
     {
         if (!$authorization->id() || !$authorization->timestamp() || !$authorization->nonce()
-            || !$authorization->hash() || !$authorization->mac()) {
+            || !$authorization->hash() || !$authorization->mac()
+        ) {
             throw new UnauthorizedException('Bad authorization');
         }
 

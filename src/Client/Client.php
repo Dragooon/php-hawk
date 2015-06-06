@@ -29,7 +29,8 @@ class Client implements ClientInterface
         TimeProviderInterface $timeProvider,
         NonceProviderInterface $nonceProvider,
         $localtimeOffset
-    ) {
+    )
+    {
         $this->crypto = $crypto;
         $this->timeProvider = $timeProvider;
         $this->nonceProvider = $nonceProvider;
@@ -48,8 +49,7 @@ class Client implements ClientInterface
     {
         if (empty($method) || !is_string($method)) {
             throw new \InvalidArgumentException('Specified method is invalid');
-        }
-        elseif (!$credentials->key() || !$credentials->id() || !$credentials->algorithm()) {
+        } elseif (!$credentials->key() || !$credentials->id() || !$credentials->algorithm()) {
             throw new \InvalidArgumentException('Specified credentials is invalid');
         }
 
@@ -57,7 +57,7 @@ class Client implements ClientInterface
         if ($this->localtimeOffset) {
             $timestamp += $this->localtimeOffset;
         }
-        
+
         list ($host, $resource, $port) = $this->parseURI($uri);
 
         $nonce = isset($options['nonce']) ? $options['nonce'] : $this->nonceProvider->createNonce();
@@ -130,7 +130,8 @@ class Client implements ClientInterface
         Request $request,
         $headerObjectOrString,
         array $options = array()
-    ) {
+    )
+    {
         $header = HeaderFactory::createFromHeaderObjectOrString(
             'Server-Authorization',
             $headerObjectOrString,
@@ -244,11 +245,9 @@ class Client implements ClientInterface
     {
         if (empty($host) || empty($port) || !is_numeric($port)) {
             throw new \InvalidArgumentException('Invalid host or port specified');
-        }
-        elseif (!$credentials->key() || !$credentials->id() || !$credentials->algorithm()) {
+        } elseif (!$credentials->key() || !$credentials->id() || !$credentials->algorithm()) {
             throw new \InvalidArgumentException('Specified credentials is invalid');
-        }
-        elseif (empty($message) || !is_string($message)) {
+        } elseif (empty($message) || !is_string($message)) {
             throw new \InvalidArgumentException('Specified message is not valid');
         }
 
@@ -299,7 +298,7 @@ class Client implements ClientInterface
         $resource = isset($parsed['path']) ? $parsed['path'] : '';
 
         if (isset($parsed['query'])) {
-            $resource .= '?'.$parsed['query'];
+            $resource .= '?' . $parsed['query'];
         }
 
         $port = isset($parsed['port']) ? $parsed['port'] : ($parsed['scheme'] === 'https' ? 443 : 80);
