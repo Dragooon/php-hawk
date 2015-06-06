@@ -95,7 +95,8 @@ class Message
     {
         $unserialized = json_decode($serialized, true);
         if (!$unserialized || empty($unserialized['id']) || empty($unserialized['timestamp']) || empty($unserialized['nonce'])
-            || empty($unserialized['hash']) || empty($unserialized['mac'])) {
+            || empty($unserialized['hash']) || empty($unserialized['mac'])
+        ) {
             throw new \InvalidArgumentException('Invalid serialized string passed');
         }
 

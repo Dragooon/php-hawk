@@ -85,11 +85,11 @@ class Client implements ClientInterface
             $dlg
         );
 
-        $attributes = array(
+        $attributes = [
             'id' => $credentials->id(),
             'ts' => $artifacts->timestamp(),
             'nonce' => $artifacts->nonce(),
-        );
+        ];
 
         if (null !== $hash) {
             $attributes['hash'] = $hash;

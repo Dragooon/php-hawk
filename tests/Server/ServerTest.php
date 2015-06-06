@@ -26,8 +26,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     {
         $key = 'HX9QcbD-r3ItFEnRcAuOSg';
         $credentialsProvider = new CallbackCredentialsProvider(
-            function ($id) use ($key)
-            {
+            function ($id) use ($key) {
                 return new Credentials(
                     $key,
                     'sha256',
@@ -92,6 +91,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
     /**
      * @test
      * @dataProvider headerDataProvider
@@ -107,7 +107,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
     {
         $server = ServerBuilder::create(
             new CallbackCredentialsProvider(
-                function($id) {
+                function ($id) {
                     // We don't need this for testing header
                     return false;
                 }
@@ -189,7 +189,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
         $serverBuilder = ServerBuilder::create(
             new CallbackCredentialsProvider(
-                function($id) use ($key) {
+                function ($id) use ($key) {
                     return new Credentials(
                         $key,
                         $id == 1 ? 'sha1' : 'sha256',
@@ -378,7 +378,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
         $serverBuilder = ServerBuilder::create(
             new CallbackCredentialsProvider(
-                function($id) use ($key) {
+                function ($id) use ($key) {
                     return new Credentials(
                         $key,
                         $id == 1 ? 'sha1' : 'sha256',
@@ -390,7 +390,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
         $serverBuilder->setNonceValidator(
             new CallbackNonceValidator(
-                function($nonce, $timestamp) {
+                function ($nonce, $timestamp) {
                     static $memory = array();
                     if (isset($memory[$nonce])) {
                         throw new UnauthorizedException('Invalid nonce');
@@ -418,8 +418,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             }
 
             $this->fail('Should reject duplicate nonce');
-        }
-        catch (UnauthorizedException $e) {
+        } catch (UnauthorizedException $e) {
             $this->assertEquals('Invalid nonce', $e->getMessage());
         }
     }
@@ -442,7 +441,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
         $serverBuilder = ServerBuilder::create(
             new CallbackCredentialsProvider(
-                function($id) use ($key) {
+                function ($id) use ($key) {
                     return new Credentials(
                         $key,
                         $id == 1 ? 'sha1' : 'sha256',

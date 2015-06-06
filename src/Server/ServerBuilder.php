@@ -89,7 +89,7 @@ class ServerBuilder
         $crypto = $this->crypto ?: new Crypto;
         $timeProvider = $this->timeProvider ?: DefaultTimeProviderFactory::create();
         $nonceValidator = $this->nonceValidator ?: new CallbackNonceValidator(
-            function($nonce, $timestamp) {
+            function ($nonce, $timestamp) {
                 return true;
             }
         );

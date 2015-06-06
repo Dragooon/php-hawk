@@ -9,7 +9,7 @@ class Header
     private $attributes;
 
     /**
-     * @param string  $fieldName
+     * @param string $fieldName
      * @param string $fieldValue
      * @param array $attributes
      */

@@ -36,7 +36,7 @@ class HeaderParser
 
             if (count($missingKeys)) {
                 throw new FieldValueParserException(
-                    "Field value was missing the following required key(s): ".implode(', ', $missingKeys)
+                    "Field value was missing the following required key(s): " . implode(', ', $missingKeys)
                 );
             }
         }

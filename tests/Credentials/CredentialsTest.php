@@ -25,8 +25,7 @@ class CredentialsTest extends \PHPUnit_Framework_TestCase
                 'example',
                 'exqbZWtykFZIh2D7cXi9dA'
             );
-        }
-        catch (\InvalidArgumentException $e) {
+        } catch (\InvalidArgumentException $e) {
             return true;
         }
 

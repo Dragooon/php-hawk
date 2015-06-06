@@ -44,7 +44,8 @@ class Artifacts
         $hash = null,
         $app = null,
         $dlg = null
-    ) {
+    )
+    {
         $this->method = $method;
         $this->host = $host;
         $this->port = $port;

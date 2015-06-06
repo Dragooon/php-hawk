@@ -16,7 +16,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
         $payload,
         $algorithm,
         $contentType
-    ) {
+    )
+    {
         $crypto = new Crypto;
 
         $calculatedHash = $crypto->calculatePayloadHash(
@@ -49,7 +50,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
         $type,
         CredentialsInterface $credentials,
         Artifacts $artifacts
-    ) {
+    )
+    {
         $crypto = new Crypto;
 
         $calculatedMac = $crypto->calculateMac($type, $credentials, $artifacts);
@@ -198,7 +200,8 @@ class CryptoTest extends \PHPUnit_Framework_TestCase
         $expectedTsMac,
         $ts,
         CredentialsInterface $credentials
-    ) {
+    )
+    {
         $crypto = new Crypto;
 
         $calculatedTsMac = $crypto->calculateTsMac($ts, $credentials);
