@@ -470,7 +470,6 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             if (is_string($expected)) {
                 $this->assertEquals($expected, $e->getMessage(), $testMessage);
             } else {
-                die(var_dump($e->getMessage()));
                 $this->fail($testMessage);
             }
         }
