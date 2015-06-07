@@ -4,7 +4,7 @@ Credentials
 Credentials are used to identify any user with valid keys to authenticate via Hawk. See
 `Dragooon\Hawk\Credentials\CredentialsInterface` for the field's information
 
-### Simple Exmaple
+### Simple Example
 
 A simple implementation of `CredentialsInterface`.
 
