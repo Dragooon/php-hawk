@@ -1,17 +1,10 @@
 Credentials
 -----------
 
-### Dragooon\Hawk\Credentials\CredentialsInterface
+Credentials are used to identify any user with valid keys to authenticate via Hawk. See
+`Dragooon\Hawk\Credentials\CredentialsInterface` for the field's information
 
-Represents a valid set of credentials.
-
- * **key()**: Used to calculate the MAC
- * **algorithm()**: The algorithm used to calculate hashes
- * **id()**: An identifier (e.g. username) for whom the key belongs
-
-In some contexts only the key may be known.
-
-### Dragooon\Hawk\Credentials\Credentials
+### Simple Exmaple
 
 A simple implementation of `CredentialsInterface`.
 
@@ -24,4 +17,26 @@ $credentials = new Dragooon\Hawk\Credentials\Credentials(
     $id          // identifier, default: null
 );
 
+```
+
+### Credentials Provider
+
+When a credential is required, a credentials provider will be called to load that credential.
+See `\Dragooon\Hawk\Credentials\CredentialsProviderInterface`
+
+For example:
+
+```php
+<?php
+
+$credentialsProvider = new Dragooon\Hawk\Credentials\CallbackCredentialsProvider(
+    function($id) {
+        $user = MyApp::loadUser($id);
+        return new Credentials(
+            $user->hawkKey,
+            $user->hawkAlgo,
+            $user->id
+        );
+    }
+);
 ```
