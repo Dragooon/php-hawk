@@ -7,7 +7,7 @@ class CallbackCredentialsProvider implements CredentialsProviderInterface
     private $callback;
 
     /**
-     * @param $callback
+     * @param Callable $callback
      */
     public function __construct($callback)
     {
