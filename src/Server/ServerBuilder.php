@@ -2,12 +2,12 @@
 
 namespace Dragooon\Hawk\Server;
 
+use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
 use Dragooon\Hawk\Crypto\Crypto;
 use Dragooon\Hawk\Nonce\CallbackNonceValidator;
 use Dragooon\Hawk\Nonce\NonceValidatorInterface;
 use Dragooon\Hawk\Time\DefaultTimeProviderFactory;
 use Dragooon\Hawk\Time\TimeProviderInterface;
-use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
 
 class ServerBuilder
 {

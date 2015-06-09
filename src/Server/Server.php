@@ -8,11 +8,10 @@ use Dragooon\Hawk\Credentials\CredentialsNotFoundException;
 use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
 use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Crypto\Crypto;
-use Dragooon\Hawk\Header\Header;
 use Dragooon\Hawk\Header\HeaderFactory;
+use Dragooon\Hawk\Message\Message;
 use Dragooon\Hawk\Nonce\NonceValidatorInterface;
 use Dragooon\Hawk\Time\TimeProviderInterface;
-use Dragooon\Hawk\Message\Message;
 
 class Server implements ServerInterface
 {

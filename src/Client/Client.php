@@ -6,9 +6,9 @@ use Dragooon\Hawk\Credentials\CredentialsInterface;
 use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Crypto\Crypto;
 use Dragooon\Hawk\Header\HeaderFactory;
+use Dragooon\Hawk\Message\Message;
 use Dragooon\Hawk\Nonce\NonceProviderInterface;
 use Dragooon\Hawk\Time\TimeProviderInterface;
-use Dragooon\Hawk\Message\Message;
 
 class Client implements ClientInterface
 {

@@ -48,7 +48,7 @@ class HeaderParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bsvY3IfUllw6V5rvk4tStEvpBhE=', $header['hash']);
         $this->assertEquals('Bazinga!', $header['ext']);
         $this->assertEquals('qbf1ZPG/r/e06F4ht+T77LXi5vw=', $header['mac']);
-        
+
         try {
             $header = 'Hawk wrong="test"';
             HeaderParser::parseFieldValue($header);

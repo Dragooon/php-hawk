@@ -13,7 +13,7 @@ class HeaderFactoryTest extends \PHPUnit_Framework_TestCase
         $header = HeaderFactory::createFromHeaderObjectOrString(
             'Test',
             $header,
-            function() {
+            function () {
                 return true;
             }
         );
@@ -37,7 +37,7 @@ class HeaderFactoryTest extends \PHPUnit_Framework_TestCase
         $header = HeaderFactory::createFromHeaderObjectOrString(
             'Test',
             new Header('Test', 'Hawk id="123456"', ['id' => 123456]),
-            function() {
+            function () {
             }
         );
         $this->assertTrue($header instanceof Header);

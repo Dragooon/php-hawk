@@ -2,12 +2,12 @@
 
 namespace Dragooon\Hawk\Server;
 
-use Dragooon\Hawk\Credentials\Credentials;
 use Dragooon\Hawk\Credentials\CallbackCredentialsProvider;
+use Dragooon\Hawk\Credentials\Credentials;
 use Dragooon\Hawk\Crypto\Artifacts;
+use Dragooon\Hawk\Message\Message;
 use Dragooon\Hawk\Nonce\CallbackNonceValidator;
 use Dragooon\Hawk\Time\DefaultTimeProviderFactory;
-use Dragooon\Hawk\Message\Message;
 
 class ServerTest extends \PHPUnit_Framework_TestCase
 {
