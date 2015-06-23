@@ -9,6 +9,7 @@ use Dragooon\Hawk\Credentials\CredentialsProviderInterface;
 use Dragooon\Hawk\Crypto\Artifacts;
 use Dragooon\Hawk\Crypto\Crypto;
 use Dragooon\Hawk\Header\HeaderFactory;
+use Dragooon\Hawk\Header\NotHawkAuthorizationException;
 use Dragooon\Hawk\Message\Message;
 use Dragooon\Hawk\Nonce\NonceValidatorInterface;
 use Dragooon\Hawk\Time\TimeProviderInterface;
@@ -45,6 +46,28 @@ class Server implements ServerInterface
         $this->nonceValidator = $nonceValidator;
         $this->timestampSkewSec = $timestampSkewSec;
         $this->localtimeOffsetSec = $localtimeOffsetSec;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function checkRequestForHawk($headerObjectOrString)
+    {
+        try {
+            HeaderFactory::createFromHeaderObjectOrString(
+                'Authorization',
+                $headerObjectOrString,
+                function() {
+                    throw new UnauthorizedException('Not a hawk request');
+                }
+            );
+
+            return true;
+        } catch (UnauthorizedException $e) {
+            return false;
+        } catch (NotHawkAuthorizationException $e) {
+            return false;
+        }
     }
 
     /**

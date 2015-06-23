@@ -13,6 +13,31 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @test
+     */
+    public function checkRequestForHawk()
+    {
+        $key = 'HX9QcbD-r3ItFEnRcAuOSg';
+        $credentialsProvider = new CallbackCredentialsProvider(
+            function ($id) use ($key) {
+                return new Credentials(
+                    $key,
+                    'sha256',
+                    'exqbZWtykFZIh2D7cXi9dA'
+                );
+            }
+        );
+
+        $server = ServerBuilder::create($credentialsProvider)
+            ->build();
+        $validHeader = 'Hawk id="123"';
+        $invalidHeader = "";
+
+        $this->assertTrue($server->checkRequestForHawk($validHeader));
+        $this->assertFalse($server->checkRequestForHawk($invalidHeader));
+    }
+
+    /**
+     * @test
      * @dataProvider bewitDataProvider
      *
      * @param string $host

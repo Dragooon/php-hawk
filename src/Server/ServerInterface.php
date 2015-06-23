@@ -10,6 +10,14 @@ use Dragooon\Hawk\Message\Message;
 interface ServerInterface
 {
     /**
+     * Checks whether the current request is for hawk or not
+     *
+     * @param Header|string $headerObjectOrString
+     * @return bool
+     */
+    public function checkRequestForHawk($headerObjectOrString);
+
+    /**
      * @param string $method
      * @param string $host
      * @param int $port
