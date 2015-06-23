@@ -12,15 +12,17 @@ without setting anything but the crendetials provider to get sane defaults.
 ```php
 <?php
 
-$credentialsProvider = function ($id) {
-    if ('12345' === $id) {
-        return new Dragooon\Hawk\Credentials\Credentials(
-            'afe89a3x',  // shared key
-            'sha256',    // default: sha256
-            '12345'      // identifier, default: null
-        );
+$credentialsProvider = new Dragooon\Hawk\Credentials\CallbackCredentialsProvider(
+    function($id) {
+        if ('12345' === $id) {
+            return new Dragooon\Hawk\Credentials\Credentials(
+                'afe89a3x',  // shared key
+                'sha256',    // default: sha256
+                '12345'      // identifier, default: null
+            );
+        }
     }
-};
+);
 
 // Simple example
 $server = Dragooon\Hawk\Server\ServerBuilder::create($credentialsProvider)
@@ -32,15 +34,17 @@ $server = Dragooon\Hawk\Server\ServerBuilder::create($credentialsProvider)
 ```php
 <?php
 
-$credentialsProvider = function ($id) {
-    if ('12345' === $id) {
-        return new Dragooon\Hawk\Credentials\Credentials(
-            'afe89a3x',  // shared key
-            'sha256',    // default: sha256
-            '12345'      // identifier, default: null
-        );
+$credentialsProvider = new Dragooon\Hawk\Credentials\CallbackCredentialsProvider(
+    function($id) {
+        if ('12345' === $id) {
+            return new Dragooon\Hawk\Credentials\Credentials(
+                'afe89a3x',  // shared key
+                'sha256',    // default: sha256
+                '12345'      // identifier, default: null
+            );
+        }
     }
-};
+);
 
 // A complete example
 $server = Dragooon\Hawk\Server\ServerBuilder::create($credentialsProvider)
