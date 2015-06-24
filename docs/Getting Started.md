@@ -139,11 +139,12 @@ example:
 
 ```php
 $headers = array();
-$headers[$request->header()->fieldName()] = $request->header()->fieldValue();
+$headers[] = $request->header()->fieldName() . ': ' . $request->header()->fieldValue();
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "http://example.com");
-curl_setupt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 
 $response = curl_exec($ch);
 
