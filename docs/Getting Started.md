@@ -122,10 +122,8 @@ A client can create a request simply by
 $request = $client->createRequest(
     $credentials, // Instance of Dragooon\Hawk\Credentials\CredentialsInterface
     'http://example.com/foo/bar?whatever',
-    'POST',
+    'GET',
     array(
-        'payload' => 'hello world!',
-        'content_type' => 'text/plain',
     )
 );
 
