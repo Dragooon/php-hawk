@@ -53,11 +53,11 @@ class Artifacts
         $this->timestamp = $timestamp;
         $this->nonce = $nonce;
         $this->ext = $ext;
-        $this->payload = $payload;
-        $this->contentType = $contentType;
-        $this->hash = $hash;
-        $this->app = $app;
-        $this->dlg = $dlg;
+        $this->payload = trim($payload) != '' ? $payload : null;
+        $this->contentType = trim($contentType) != '' ? $contentType : null;
+        $this->hash = trim($hash) != '' ? $hash : null;
+        $this->app = trim($app) != '' ? $app : null;
+        $this->dlg = trim($dlg) != '' ? $dlg : null;
     }
 
     /**
