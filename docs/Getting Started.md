@@ -4,6 +4,27 @@ Getting Started
 This guide covers the basic authentication by a server and making request by a client, for more advanced usage see the
 respective docs.
 
+### Installation
+
+The library can be installed using composer, currently it's not listed on packagist. An example composer.json:
+
+```json
+{
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/Dragooon/php-hawk"
+    }
+  ],
+  "require": {
+    "Dragooon/hawk": "dev-master"
+  }
+}
+```
+
+Including the above in composer.json and including vendor/autoload.php into your PHP scripts should allow you to
+start using the library. See composer documentation for more information
+
 ### Server
 
 For a server to be able to authenticate Hawk requests, you need to use Dragooon\Hawk\Server\Server library. The
