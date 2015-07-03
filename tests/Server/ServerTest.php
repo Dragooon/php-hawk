@@ -415,7 +415,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
 
         $serverBuilder->setNonceValidator(
             new CallbackNonceValidator(
-                function ($nonce, $timestamp) {
+                function ($key, $nonce, $timestamp) {
                     static $memory = [];
                     if (isset($memory[$nonce])) {
                         throw new UnauthorizedException('Invalid nonce');

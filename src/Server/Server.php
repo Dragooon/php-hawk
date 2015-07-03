@@ -145,7 +145,7 @@ class Server implements ServerInterface
             }
         }
 
-        if (!$this->nonceValidator->validateNonce($artifacts->nonce(), $artifacts->timestamp())) {
+        if (!$this->nonceValidator->validateNonce($credentials->key(), $artifacts->nonce(), $artifacts->timestamp())) {
             throw new UnauthorizedException('Invalid nonce');
         }
 
@@ -311,7 +311,7 @@ class Server implements ServerInterface
             $authorization->hash()
         );
 
-        if (!$this->nonceValidator->validateNonce($artifacts->nonce(), $artifacts->timestamp())) {
+        if (!$this->nonceValidator->validateNonce($credentials->key(), $artifacts->nonce(), $artifacts->timestamp())) {
             throw new UnauthorizedException('Invalid nonce');
         }
 

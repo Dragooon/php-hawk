@@ -17,8 +17,8 @@ class CallbackNonceValidator implements NonceValidatorInterface
     /**
      * {@inheritDoc}
      */
-    public function validateNonce($nonce, $timestamp)
+    public function validateNonce($key, $nonce, $timestamp)
     {
-        return call_user_func_array($this->callback, [$nonce, $timestamp]);
+        return call_user_func_array($this->callback, [$key, $nonce, $timestamp]);
     }
 }
